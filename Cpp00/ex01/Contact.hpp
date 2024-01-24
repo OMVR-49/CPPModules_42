@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 19:43:40 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/01/19 02:12:03 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/01/22 10:10:40 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 
 #include <iostream>
 #include <string>
-#include <cctype>
 
 class Contact
 {
@@ -27,8 +26,6 @@ class Contact
 			std::string PhoneNumber;
 			std::string DarkestSecret;
 	public:
-			// Contact(void);
-			// ~Contact(void);
 			void	sfirst_name();
 			void	slast_Name();
 			void	snickname();
@@ -39,7 +36,9 @@ class Contact
 			std::string	glast_Name();
 			std::string	gnickname();
 			std::string	gphone_number();
-			std::string	gdarkest_secret();	
+			std::string	gdarkest_secret();
 };
+
+void gb();
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 23:24:44 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/01/19 16:34:30 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/01/24 23:49:46 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ class Zombie
 	private:
 		std::string name;
 	public:
-		Zombie();
+		Zombie(std::string& name);
 		~Zombie();
 		void setName(std::string& newName);
 		void announce( void );

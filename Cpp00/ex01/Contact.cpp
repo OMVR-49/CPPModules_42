@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 20:01:54 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/01/17 22:01:42 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/01/22 12:52:27 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 bool is_valid_input(const std::string& input, int x)
 {
-    int i = 0;
+    size_t i = 0;
 
     if (x == 0)
     {
-        while (i < static_cast<int>(input.length()))
+        while (i < input.length())
 		{
 			if (std::isalpha(input[i]))
 				return true;
@@ -28,7 +28,7 @@ bool is_valid_input(const std::string& input, int x)
 	}
 	else
 	{
-        while (i < static_cast<int>(input.size()))
+        while (i < input.size())
 		{
 			if (!std::isdigit(input[i]))
 				return false;
@@ -44,74 +44,56 @@ void	Contact::sdarkest_secret()
 {
 	std::string line;
 
-	std::cout << "Enter a dark secret about your contact" << std::endl;
+	std::cout << "Enter a dark secret about your contact :" << std::endl;
 	if (std::getline(std::cin, line).eof())
-	{
-		std::cout << "\nGoodbye 👋 , See u soon ..." << std::endl;
-		exit(0);
-	}
+		gb();
 	Contact::DarkestSecret = line;
 }
+
 void	Contact::sphone_number()
 {
 	std::string line;
 
-	std::cout << "Enter the phone number of your contact" << std::endl;
+	std::cout << "Enter the phone number of your contact :" << std::endl;
 	if (std::getline(std::cin, line).eof())
-	{
-		std::cout << "\nGoodbye 👋 , See u soon ..." << std::endl;
-		exit(0);
-	}
+		gb();
 	while (!is_valid_input(line, 1))
 	{
-		std::cout << "Enter a valid phone number for your contact" << std::endl;
+		std::cout << "Enter a valid phone number for your contact :" << std::endl;
 		if (std::getline(std::cin, line).eof())
-		{
-			std::cout << "\nGoodbye 👋 , See u soon ..." << std::endl;
-			exit(0);
-		}
+			gb();
 	}
 	Contact::PhoneNumber = line;
 }
+
 void	Contact::snickname()
 {
 	std::string line;
 
-	std::cout << "Enter a nickname for your contact" << std::endl;
+	std::cout << "Enter a nickname for your contact :" << std::endl;
 	if (std::getline(std::cin, line).eof())
-	{
-		std::cout << "\nGoodbye 👋 , See u soon ..." << std::endl;
-		exit(0);
-	}
+		gb();
 	while (!is_valid_input(line, 0))
 	{
-		std::cout << "Enter a valid nickname for your contact" << std::endl;
+		std::cout << "Enter a valid nickname for your contact :" << std::endl;
 		if (std::getline(std::cin, line).eof())
-		{
-			std::cout << "\nGoodbye 👋 , See u soon ..." << std::endl;
-			exit(0);
-		}
+			gb();
 	}
 	Contact::Nickname = line;
 }
+
 void	Contact::slast_Name()
 {
 	std::string line;
 
-	std::cout << "Enter the last name of your contact" << std::endl;
+	std::cout << "Enter the last name of your contact :" << std::endl;
 	if (std::getline(std::cin, line).eof())
-	{
-		std::cout << "\nGoodbye 👋 , See u soon ..." << std::endl;
-		exit(0);
-	}
+		gb();
 	while (!is_valid_input(line, 0))
 	{
-		std::cout << "Enter a valid last name for your contact" << std::endl;
+		std::cout << "Enter a valid last name for your contact :" << std::endl;
 		if (std::getline(std::cin, line).eof())
-		{
-			std::cout << "\nGoodbye 👋 , See u soon ..." << std::endl;
-			exit(0);
-		}
+			gb();
 	}
 	Contact::LastName = line;
 }
@@ -120,20 +102,14 @@ void	Contact::sfirst_name()
 {
 	std::string line;
 
-	std::cout << "Enter the first name of your contact" << std::endl;
+	std::cout << "Enter the first name of your contact :" << std::endl;
 	if (std::getline(std::cin, line).eof())
-	{
-		std::cout << "\nGoodbye 👋 , See u soon ..." << std::endl;
-		exit(0);
-	}
+		gb();
 	while (!is_valid_input(line, 0))
 	{
-		std::cout << "Enter a valid first name for your contact" << std::endl;
+		std::cout << "Enter a valid first name for your contact :" << std::endl;
 		if (std::getline(std::cin, line).eof())
-		{
-			std::cout << "\nGoodbye 👋 , See u soon ..." << std::endl;
-			exit(0);
-		}
+			gb();
 	}
 	Contact::FirstName = line;
 }

@@ -6,7 +6,7 @@
 #    By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/11 11:33:49 by ojebbari          #+#    #+#              #
-#    Updated: 2024/01/19 00:47:35 by ojebbari         ###   ########.fr        #
+#    Updated: 2024/01/22 12:32:48 by ojebbari         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,7 +46,6 @@ $(NAME) : $(OBJ) PhoneBook.hpp Contact.hpp
 	@printf "$(RED)			| \__/\| |   | |     \ |_/ /\ |_/ /  / /    | |___/ /^\ \ |_/ /_| |_\n"
 	@printf "$(RED)		 	 \____/\_|   \_|      \___/  \___/  /_/     \____/\/   \/\___/ \___/\n"
 	@printf "$(WHITE)\n"
-
 	@$(CC) $(CPPFLAGS) $(OBJ) -o $@
 
 clean :

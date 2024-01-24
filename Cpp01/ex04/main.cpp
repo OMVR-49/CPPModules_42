@@ -5,18 +5,28 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/18 23:33:41 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/01/21 08:35:10 by ojebbari         ###   ########.fr       */
+/*   Created: 2024/01/23 13:26:46 by ojebbari          #+#    #+#             */
+/*   Updated: 2024/01/24 16:48:32 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Zombie.hpp"
+#include "fileDeal.hpp"
 
-int main()
+int main(int ac, char **av)
 {
-    Zombie *dZombie = newZombie("heaperstik");
-    dZombie->announce();
-    randomChump("stackest");
-    delete dZombie;
-    return (0);
+    if(ac != 4)
+    {
+        std::cerr << "usage : " << av[0] 
+                  << " <name of file> <string to replace> <string to replace with>" << std::endl;
+        return 1;
+    }
+    std::string inFileName = av[1];
+    std::string s1 = av[2];
+    std::string s2 = av[3];
+
+	std::string outFileName = inFileName + ".replace";
+	fileDeal fileDeal(inFileName, s1, s2);
+	if(fileDeal.replaceAndSave())
+		return 1;
+	return (0);
 }

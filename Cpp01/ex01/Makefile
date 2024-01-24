@@ -6,7 +6,7 @@
 #    By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/19 16:26:30 by ojebbari          #+#    #+#              #
-#    Updated: 2024/01/19 22:09:18 by ojebbari         ###   ########.fr        #
+#    Updated: 2024/01/21 08:58:13 by ojebbari         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,21 +23,22 @@ GREEN		=	\e[92;5;118m
 YELLOW		=	\e[93;5;226m
 GRAY		=	\e[33;2;37m
 RESET		=	\e[0m
-CURSIVE		=	\e[33;3m
+CURSIVE		=	\e[2m
+STRIKE		= 	\e[9m
 BLUE		=   \e[34m
 BLACK		=   \e[30m
 RED			=	\e[31m
 CYANA		=	\e[36m
 WHITE		=	\e[37m
-
+BOLD		=	\e[1m
 all : $(NAME)
 
 %.o : %.cpp
-	@printf "$(CURSIVE)$(GRAY) 	- Making object file $(notdir $@) from source file $(notdir $<) ... $(RESET)\n"
+	@printf "$(CURSIVE) 	- Making object file $(notdir $@) from source file $(notdir $<) ... $(RESET)\n"
 	@$(CC) $(CPPFLAGS)  -c $< -o $@
 
 $(NAME) : $(OBJ) Zombie.hpp
-	@printf "$(CURSIVE)$(GREEN)  	- Compiling :$(RESET)\n"
+	@printf "$(BOLD)$(GREEN)  	- Compiling :$(RESET)\n"
 	@printf "$(WHITE)\n"
 	@printf "$(RED)			 _____ ____________   _____  __        __  _______   _______  __   \n"
 	@printf "$(RED)			/  __ \| ___ \ ___ \ |  _  |/  |      / / |  ___\ \ / /  _  |/  |  \n"
@@ -52,11 +53,11 @@ $(NAME) : $(OBJ) Zombie.hpp
 clean :
 	@printf "$(YELLOW)	- Removing object files ... \n"
 	@$(RM) $(OBJ)
-	@printf "$(CURSIVE)$(GRAY)	  - Object files removed.$(RESET)\n"
+	@printf "$(STRIKE)$(GRAY)	  - Object files removed.$(RESET)\n"
 
 fclean : clean
-	@printf "$(GREEN)	- Removing $(NAME)... $(RESET)\n"
+	@printf "$(GREEN)	- Removing ./$(NAME) $(RESET)\n"
 	@$(RM) $(NAME)
-	@printf "$(CURSIVE)$(GRAY)	  - Executable removed.$(RESET)\n\n"
+	@printf "$(STRIKE)$(GRAY)	  - Executable removed.$(RESET)\n\n"
 
 re : fclean all

@@ -1,20 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   newZombie.cpp                                      :+:      :+:    :+:   */
+/*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/18 23:33:17 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/01/24 23:50:40 by ojebbari         ###   ########.fr       */
+/*   Created: 2024/01/21 01:11:36 by ojebbari          #+#    #+#             */
+/*   Updated: 2024/01/23 13:23:34 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Zombie.hpp"
+#include "Weapon.hpp"
+#include "HumanA.hpp"
+#include "HumanB.hpp"
 
-Zombie* newZombie(std::string name)
+int main()
 {
-    Zombie *newZombie = new Zombie(name);
-    newZombie->setName(name);
-    return (newZombie);
+	{
+		Weapon club = Weapon("crude spiked club");
+		HumanA bob("ssefa7", club);
+		bob.attack();
+		club.setType("menjel");
+		bob.attack();
+	}
+	{
+		Weapon club = Weapon("crude spiked club");
+		HumanB jim("Blade Vanquisherr");
+		jim.setWeapon(club);
+		jim.attack();
+		club.setType("Reaper's Edge");
+		jim.attack();
+	}
+	return 0;
 }

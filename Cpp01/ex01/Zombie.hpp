@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:27:11 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/01/19 22:10:14 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/01/24 23:54:38 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ class Zombie
 
 Zombie*	newZombie(std::string name);
 void	randomChump( std::string name );
-Zombie* zombieHorde( int N, std::string name );
+Zombie* zombieHorde(int N, std::string name );
 void deletezombieHorde(Zombie* newZombies);
 
 #endif

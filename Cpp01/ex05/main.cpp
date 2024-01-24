@@ -1,20 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   newZombie.cpp                                      :+:      :+:    :+:   */
+/*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/18 23:33:17 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/01/24 23:50:40 by ojebbari         ###   ########.fr       */
+/*   Created: 2024/01/24 17:31:28 by ojebbari          #+#    #+#             */
+/*   Updated: 2024/01/24 18:24:30 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Zombie.hpp"
+#include "Harl.hpp"
 
-Zombie* newZombie(std::string name)
+int main()
 {
-    Zombie *newZombie = new Zombie(name);
-    newZombie->setName(name);
-    return (newZombie);
+	Harl obj;
+	obj.complain("DEBUG");
+	obj.complain("INFO");
+	obj.complain("WARNING");
+	obj.complain("ERROR");
+	return 0;
 }

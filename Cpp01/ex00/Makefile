@@ -6,14 +6,14 @@
 #    By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/18 23:33:48 by ojebbari          #+#    #+#              #
-#    Updated: 2024/01/19 00:40:16 by ojebbari         ###   ########.fr        #
+#    Updated: 2024/01/21 08:44:57 by ojebbari         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC = main.cpp newZombie.cpp randomChump.cpp Zombie.cpp
 CC = c++ 
 CPPFLAGS = -Wall -Wextra -Werror -std=c++98
-NAME = Zombie
+NAME = zombieHorde
 RM = rm -fr
 OBJ = $(SRC:.cpp=.o)
 

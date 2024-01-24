@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:30:36 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/01/19 22:10:29 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/01/21 08:38:15 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int main()
 {
     Zombie *dZombies = zombieHorde(5, "rafael");
-	for(int i = 0; i < 5; i++)
+	for(int i = 0 ; i < 5 ; i++)
 	{
 		dZombies[i].announce();
 	}

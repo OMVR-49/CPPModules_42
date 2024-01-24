@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 20:01:02 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/01/18 23:11:16 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/01/22 10:16:47 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int main(void)
         else if (line == "EXIT")
             return(0);
         else
-            std::cout << "Enter a valid command 🤨 : " << std::endl;
+            std::cout << "Invalid command 😑 , "; 
     }
     return (0);
 }

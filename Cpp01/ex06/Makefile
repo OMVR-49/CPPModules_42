@@ -5,15 +5,15 @@
 #                                                     +:+ +:+         +:+      #
 #    By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/01/11 10:53:24 by ojebbari          #+#    #+#              #
-#    Updated: 2024/01/22 12:25:23 by ojebbari         ###   ########.fr        #
+#    Created: 2024/01/24 17:48:29 by ojebbari          #+#    #+#              #
+#    Updated: 2024/01/24 19:16:05 by ojebbari         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRC = megaphone.cpp
+SRC = main.cpp  Harl.cpp
 CC = c++ 
 CPPFLAGS = -Wall -Wextra -Werror -std=c++98
-NAME = megaphone
+NAME = harlFilter
 RM = rm -fr
 OBJ = $(SRC:.cpp=.o)
 
@@ -32,21 +32,20 @@ WHITE		=	\e[37m
 
 all : $(NAME)
 
-%.o : %.cpp
-	@printf "$(CURSIVE)$(GRAY) 	- Making object file $@ from source file $< ... $(RESET)\n"
+%.o : %.cpp Harl.hpp
+	@printf "$(CURSIVE)$(GRAY) 	- Making object file $(notdir $@) from source file $(notdir $<) ... $(RESET)\n"
 	@$(CC) $(CPPFLAGS)  -c $< -o $@
 
-$(NAME) : $(OBJ)
+$(NAME) : $(OBJ) Harl.hpp
 	@printf "$(CURSIVE)$(GREEN)  	- Compiling :$(RESET)\n"
 	@printf "$(WHITE)\n"
-	@printf "$(RED)			 _____ ____________   _____  _____       __  _______   _______  _____ \n"
-	@printf "$(RED)			/  __ \| ___ \ ___ \ |  _  ||  _  |     / / |  ___\ \ / /  _  ||  _  |\n"
-	@printf "$(RED)			| /  \/| |_/ / |_/ / | |/' || |/' |    / /  | |__  \ V /| |/' || |/' |\n"
-	@printf "$(RED)			| |    |  __/|  __/  |  /| ||  /| |   / /   |  __| /   \|  /| ||  /| |\n"
-	@printf "$(RED)			| \__/\| |   | |     \ |_/ /\ |_/ /  / /    | |___/ /^\ \ |_/ /\ |_/ /\n"
-	@printf "$(RED)		 	 \____/\_|   \_|      \___/  \___/  /_/     \____/\/   \/\___/  \___/ \n"
+	@printf "$(RED)			 _____ ____________   _____  __        __  _______   _______  _____ \n"
+	@printf "$(RED)			/  __ \| ___ \ ___ \ |  _  |/  |      / / |  ___\ \ / /  _  |/ ___|\n"
+	@printf "$(RED)			| /  \/| |_/ / |_/ / | |/' | | |     / /  | |__  \ V /| |/' / /___ \n"
+	@printf "$(RED)			| |    |  __/|  __/  |  /| | | |    / /   |  __| /   \|  /| | ___ \ \n"
+	@printf "$(RED)			| \__/\| |   | |     \ |_/ /_| |_  / /    | |___/ /^\ \ |_/ / \_/ |\n"
+	@printf "$(RED)		 	 \____/\_|   \_|      \___/ \___/ /_/     \____/\/   \/\___/\_____/\n"
 	@printf "$(WHITE)\n"
-
 	@$(CC) $(CPPFLAGS) $(OBJ) -o $@
 
 clean :
