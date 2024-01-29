@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 05:31:05 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/01/28 23:14:18 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/01/29 08:48:16 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,20 +22,23 @@ class Fixed
 	private:
 		int raw;
 		static const int fract;
-	public:	
+	public:
+	// OCCF:	
 		Fixed();
 		Fixed(const Fixed &src);
 		Fixed(const int n);
 		Fixed(const float f);
 		~Fixed();
+	// Assigenement Operator:
 		Fixed &operator = (const Fixed &rhs);
-		// Fixed &operator<<(const Fixed &rhs);
-
-		int toInt( void ) const;
-		float toFloat( void ) const;
+	// Getter & Setter:
 		int getRawBits( void ) const;
 		void setRawBits( int const raw );
+	// to:
+		int toInt( void ) const;
+		float toFloat( void ) const;
 };
 
 std::ostream &operator<<(std::ostream &os, const Fixed &f);
+
 #endif

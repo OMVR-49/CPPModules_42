@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 05:31:03 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/01/29 03:39:31 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/01/29 08:55:26 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,43 +23,43 @@ class Fixed
 		int raw;
 		static const int fract;
 	public:	
-        //constructors/destructor:
+	// OCCF:	
 		Fixed();
 		Fixed(const Fixed &src);
 		Fixed(const int n);
 		Fixed(const float f);
 		~Fixed();
-        //to:
-        int toInt( void ) const;
-		float toFloat( void ) const;
-		//encap:
+	// Assigenement Operator:
+		Fixed &operator = (const Fixed &rhs);
+	// Getter & Setter:
 		int getRawBits( void ) const;
 		void setRawBits( int const raw );
-		
-        Fixed &operator = (const Fixed &rhs);
-        
-        //overloaded member functions:
-        static Fixed& min (Fixed& d1, Fixed& d2);
-        const static Fixed& min (const Fixed& d1, const Fixed& d2);
-        static Fixed& max (Fixed& d1, Fixed& d2);
-        const static Fixed& max (const Fixed& d1, const Fixed& d2);
-        //incremet/decrement operators:
-        Fixed& operator++();
-        Fixed operator++(int);
-        Fixed& operator--();
-        Fixed operator--(int);
-        //arithmetic operators:
-        Fixed operator+(const Fixed& rhs) const;
-        Fixed operator-(const Fixed& rhs) const;
-        Fixed operator*(const Fixed& rhs) const;
-        Fixed operator/(const Fixed& rhs) const;
-        //comparison operators:
-        bool operator > (const Fixed &rhs);
-        bool operator < (const Fixed &rhs);
-        bool operator >= (const Fixed &rhs);
-        bool operator <= (const Fixed &rhs);
-        bool operator == (const Fixed &rhs);
-        bool operator != (const Fixed &rhs);
+	// to:
+		int toInt( void ) const;
+		float toFloat( void ) const;
+	//comparison operators:
+		bool operator > (const Fixed &rhs);
+		bool operator < (const Fixed &rhs);
+		bool operator >= (const Fixed &rhs);
+		bool operator <= (const Fixed &rhs);
+		bool operator == (const Fixed &rhs);
+		bool operator != (const Fixed &rhs);
+	//pre-increment operators:
+		Fixed& operator++();
+		Fixed& operator--();
+	//post-increment operators:
+		Fixed operator++(int);
+		Fixed operator--(int);
+	//arithmetic operators:
+		Fixed operator+(const Fixed& rhs) const;
+		Fixed operator-(const Fixed& rhs) const;
+		Fixed operator*(const Fixed& rhs) const;
+		Fixed operator/(const Fixed& rhs) const;
+	//overloaded member functions:
+		static Fixed& min (Fixed& d1, Fixed& d2);
+		const static Fixed& min (const Fixed& d1, const Fixed& d2);
+		static Fixed& max (Fixed& d1, Fixed& d2);
+		const static Fixed& max (const Fixed& d1, const Fixed& d2);
 };
 
 std::ostream &operator<<(std::ostream &os, const Fixed &f);

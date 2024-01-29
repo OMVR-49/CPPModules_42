@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 05:31:08 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/01/29 03:47:51 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/01/29 08:45:40 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,12 @@ Fixed &Fixed::operator = (const Fixed &rhs)
 
 int Fixed::toInt( void ) const
 {
-    return raw >> fract;
+    return ((int)(raw >> fract));
 }
 
 float Fixed::toFloat( void ) const
 {
-    return (float(raw) / (1 << fract));
+    return ((float)(raw) / (1 << fract));
 }
 
 int Fixed::getRawBits() const 

@@ -6,13 +6,13 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 05:31:19 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/01/28 23:14:18 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/01/29 07:58:29 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Fixed.hpp"
 
-// const int Fixed::fract = 8;
+const int Fixed::fract = 8;
 
 Fixed::Fixed() : raw(0)
 {
