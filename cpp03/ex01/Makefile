@@ -18,7 +18,7 @@ RM = rm -fr
 OBJ = $(SRC:.cpp=.o)
 
 #Colors:
-
+ 
 GREEN		=	\e[92;5;118m
 YELLOW		=	\e[93;5;226m
 GRAY		=	\e[33;2;37m
