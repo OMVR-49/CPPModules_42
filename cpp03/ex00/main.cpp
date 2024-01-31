@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 10:12:42 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/01/30 18:39:42 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/01/31 11:14:15 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,20 @@
 int main()
 {
 	ClapTrap instence("Omar");
-	ClapTrap copy(instence);
+	ClapTrap k("Sami");
+	ClapTrap copy(k);
 
+	instence.attack("Boot");
+	instence.attack("Boot");
+	instence.attack("Boot");
+	instence.attack("Boot");
+	instence.attack("Boot");
+	instence.attack("Boot");
+	instence.attack("Boot");
+	instence.attack("Boot");
+	instence.attack("Boot");
+	instence.attack("Boot");
+	instence.attack("Boot");
 	instence.attack("Boot");
 	instence.takeDamage(22);
 	instence.attack("Spiderman");

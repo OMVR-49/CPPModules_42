@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 10:15:18 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/01/30 16:44:05 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/01/31 10:55:01 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,11 @@ attackDamage(0) , maxEnergyPoints(10) , maxHitPoints(10)
 ClapTrap:: ~ClapTrap()
 {
 	std::cout << "ClapTrap  Destructor Called" << std::endl;
+}
+
+ClapTrap::ClapTrap(const ClapTrap& copy)
+{
+	*this = copy;
 }
 
 ClapTrap &ClapTrap::operator=(const ClapTrap &rhs)
@@ -78,7 +83,7 @@ void ClapTrap::beRepaired(unsigned int amount)
 	if (energyPoints != 0 && amount != 0)
 	{
 		std::cout << "ClapTrap " << Name << " repairs itself with " 
-				  << amount << " hitpoint " << std::endl;
+				  << amount << " hitpoints " << std::endl;
 		hitPoints += amount;
 		energyPoints --; 
 	}

@@ -6,14 +6,14 @@
 #    By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/29 10:12:19 by ojebbari          #+#    #+#              #
-#    Updated: 2024/01/29 10:13:10 by ojebbari         ###   ########.fr        #
+#    Updated: 2024/01/31 10:42:05 by ojebbari         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRC = main.cpp 
+SRC = main.cpp ClapTrap.cpp ScavTrap.cpp FragTrap.cpp
 CC = c++ 
 CPPFLAGS = -Wall -Wextra -Werror -std=c++98
-NAME = 
+NAME = FragTrap
 RM = rm -fr
 OBJ = $(SRC:.cpp=.o)
 
@@ -32,11 +32,11 @@ WHITE		=	\e[37m
 
 all : $(NAME)
 
-%.o : %.cpp 
+%.o : %.cpp FragTrap.hpp
 	@printf "$(CURSIVE)$(GRAY) 	- Making object file $@ from source file $< ... $(RESET)\n"
 	@$(CC) $(CPPFLAGS)  -c $< -o $@
 
-$(NAME) : $(OBJ) 
+$(NAME) : $(OBJ) FragTrap.hpp
 	@printf "$(CURSIVE)$(GREEN)  	- Compiling :$(RESET)\n"
 	@printf "$(WHITE)\n"
 	@printf "$(RED)			 _____ ____________   _____  __        __  _______   _______  _____ \n"

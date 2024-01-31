@@ -6,14 +6,14 @@
 #    By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/29 10:11:46 by ojebbari          #+#    #+#              #
-#    Updated: 2024/01/29 16:22:13 by ojebbari         ###   ########.fr        #
+#    Updated: 2024/01/31 11:14:26 by ojebbari         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC = main.cpp ClapTrap.cpp
 CC = c++ 
 CPPFLAGS = -Wall -Wextra -Werror -std=c++98
-NAME = lslslsl
+NAME = ClapTrap
 RM = rm -fr
 OBJ = $(SRC:.cpp=.o)
 

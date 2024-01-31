@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 10:15:09 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/01/30 17:56:54 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/01/30 18:48:52 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 #include "ClapTrap.hpp"
 
-class ScavTrap : public ClapTrap
+class ScavTrap : protected ClapTrap
 {
     public:
         ScavTrap();

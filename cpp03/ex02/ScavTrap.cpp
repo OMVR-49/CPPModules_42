@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 10:15:11 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/01/30 18:33:01 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/01/31 10:47:17 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ ScavTrap::ScavTrap(const ScavTrap& copy)
     *this = copy;
 }
 
-ScavTrap& ScavTrap::operator=(const ScavTrap& obj){
+ScavTrap& ScavTrap::operator=(const ScavTrap& obj)
+{
 
     this->ClapTrap::operator=(obj);
     return (*this);

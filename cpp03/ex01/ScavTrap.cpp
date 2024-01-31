@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 10:15:11 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/01/30 18:33:01 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/01/31 11:10:03 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,42 +14,60 @@
 
 ScavTrap::ScavTrap() 
 {
-    std::cout<< "Scavtrap Constructor"<<std::endl;
+	this->Name = "";
+	this->hitPoints = 100;
+	this->energyPoints = 50;
+	this->attackDamage = 20;
+	this->maxEnergyPoints = 50;
+	this->maxHitPoints = 100;
+	std::cout<< "\033[92mScavTrap Constructor\033[0m"<<std::endl;
 }
 
 ScavTrap::ScavTrap(const std::string &Name)
 {
-    this->Name = Name;
-    std::cout<< "Scavtrap Paramerezied Constructor"<<std::endl;
+	this->Name = Name;
+	this->hitPoints = 100;
+	this->energyPoints = 50;
+	this->attackDamage = 20;
+	this->maxEnergyPoints = 50;
+	this->maxHitPoints = 100;
+	std::cout<< "\033[92m" << "ScavTrap Paramerezied Constructor\033[0m"<<std::endl;
 }
 
 ScavTrap::~ScavTrap() 
 {
-    std::cout<< "Scavtrap Destructor"<<std::endl;    
+	std::cout<< "\033[92mScavTrap Destructor\033[0m"<<std::endl;
 }
 
 ScavTrap::ScavTrap(const ScavTrap& copy) 
 {
-    *this = copy;
+	*this = copy;
 }
 
-ScavTrap& ScavTrap::operator=(const ScavTrap& obj){
-
-    this->ClapTrap::operator=(obj);
-    return (*this);
+ScavTrap& ScavTrap::operator=(const ScavTrap& obj)
+{
+	std::cout << "\033[92mScavTrap assigenement operator called\033[0m" << std::endl;
+	this->Name = obj.Name;
+	this->hitPoints = obj.hitPoints;
+	this->maxHitPoints = obj.maxHitPoints;
+	this->energyPoints = obj.energyPoints;
+	this->attackDamage = obj.attackDamage;
+	this->maxEnergyPoints = obj.maxEnergyPoints;
+	return (*this);
 }
+
 void ScavTrap::attack(const std::string& target)
 {
    if (energyPoints != 0 && hitPoints != 0)
 	{
-		std::cout << "ScavTrap " << Name << " attacks " 
+		std::cout << "\033[92mScavTrap " << Name << " attacks " 
 				  << target << ", causing " << attackDamage 
-				  << " points of damage! " <<std::endl;
+				  << " points of damage!\033[0m " <<std::endl;
 		energyPoints--;
 	}
 }
 
 void ScavTrap::guardGate()
 {
-    std::cout << "ScavTrap " << Name << " is now in Gate keeper mode" << std::endl;
+	std::cout << "\033[92mScavTrap " << Name << " is now in Gate keeper mode\033[0m" << std::endl;
 }

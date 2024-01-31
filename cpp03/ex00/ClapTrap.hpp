@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 10:13:44 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/01/30 16:10:12 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/01/31 10:54:46 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ class ClapTrap
 	// OCCF:
 		ClapTrap();
 		ClapTrap(const std::string &Name);
-		ClapTrap(ClapTrap &src);
+		ClapTrap(const ClapTrap &src);
 		ClapTrap &operator=(const ClapTrap &rhs);
 		~ClapTrap();
 	//Public member function:
