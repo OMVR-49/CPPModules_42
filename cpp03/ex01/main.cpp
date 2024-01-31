@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 10:12:40 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/01/31 10:33:03 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/01/31 12:14:23 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,4 @@ int main()
 	c.takeDamage(99);
 	c.beRepaired(100);
 	v.beRepaired(100);
-	
 }

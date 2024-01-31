@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 10:18:41 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/01/31 11:11:04 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/01/31 12:15:25 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ FragTrap::FragTrap()
 	this->attackDamage = 30;
 	this->maxEnergyPoints = 100;
 	this->maxHitPoints = 100;
-	std::cout<< "\033[31mFragTrap Default Constructor\033[0m"<<std::endl;
+	std::cout<< "\033[31mFragTrap Default Constructor Called\033[0m"<<std::endl;
 }
 
 FragTrap::FragTrap(const std::string &Name) 
@@ -31,17 +31,21 @@ FragTrap::FragTrap(const std::string &Name)
 	this->attackDamage = 30;
 	this->maxEnergyPoints = 100;
 	this->maxHitPoints = 100;
-	std::cout<< "\033[31mFragTrap Param Constructor\033[0m"<<std::endl;
+	std::cout<< "\033[31mFragTrap Param Constructor Called\033[0m"<<std::endl;
+	std::cout << "Name : "<< Name << std::endl;
+	std::cout << "hitPoints = " << hitPoints << std::endl;
+	std::cout << "energyPoints = " << energyPoints << std::endl;
+	std::cout << "attackDamage = " << attackDamage << std::endl << std::endl;
 }
 
 FragTrap::~FragTrap() 
 {
-	std::cout<< "\033[31mFragTrap Destructor\033[0m"<<std::endl;  
+	std::cout<< "\033[31mFragTrap Destructor Called\033[0m"<<std::endl;  
 }
 
 FragTrap& FragTrap::operator=(const FragTrap& obj) 
 {
-	std::cout<< "\033[31mFragTrap Assignment  called\033[0m"<<std::endl; 
+	std::cout<< "\033[31mFragTrap Assignment called\033[0m"<<std::endl; 
 	this->Name = obj.Name;
     this->hitPoints = obj.hitPoints;
     this->maxHitPoints = obj.maxHitPoints;
@@ -53,7 +57,7 @@ FragTrap& FragTrap::operator=(const FragTrap& obj)
 
 FragTrap::FragTrap(const FragTrap& copy)
 {
-	std::cout<< "\033[31mFragTrap Copy Constructor called\033[0m"<<std::endl; 
+	std::cout<< "\033[31mFragTrap Copy Constructor Called\033[0m"<<std::endl; 
 	*this = copy;
 }
 
@@ -70,6 +74,5 @@ void FragTrap::attack(const std::string target)
 
 void FragTrap::highFivesGuys()
 {
-	std::cout << "\033[31mHigh Fives\033[0m"<< std::endl;
+	std::cout << "\033[31mHigh Fives ✋\033[0m"<< std::endl;
 }
-

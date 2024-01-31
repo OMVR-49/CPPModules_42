@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 10:16:55 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/01/31 10:58:47 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/01/31 12:00:16 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ class FragTrap : public ClapTrap
         FragTrap(const std::string &Name);
         FragTrap(const FragTrap& copy);
         FragTrap& operator=(const FragTrap& obj);
-        
+
         void attack(std::string target);
         void highFivesGuys();
 };

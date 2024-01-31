@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 10:15:18 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/01/31 10:55:01 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/01/31 12:11:34 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ maxEnergyPoints(10) , maxHitPoints(10)
 ClapTrap:: ClapTrap(const std::string& Name) : Name(Name) , hitPoints(10) , energyPoints(10) ,
 attackDamage(0) , maxEnergyPoints(10) , maxHitPoints(10)
 {
-	std::cout << "ClapTrap parameterized  Constructor called "<< Name << std::endl;
-	std::cout << "ClapTrap : "<< Name << std::endl;
+	std::cout << "ClapTrap parameterized  Constructor called " << std::endl;
+	std::cout << "Name : "<< Name << std::endl;
 	std::cout << "hitPoints = " << hitPoints << std::endl;
 	std::cout << "energyPoints = " << energyPoints << std::endl;
 	std::cout << "attackDamage = " << attackDamage << std::endl << std::endl;
@@ -37,6 +37,7 @@ ClapTrap:: ~ClapTrap()
 
 ClapTrap::ClapTrap(const ClapTrap& copy)
 {
+	std::cout << "ClapTrap Copy Constructor Called" << std::endl;
 	*this = copy;
 }
 

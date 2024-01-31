@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 10:13:44 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/01/31 10:55:34 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/01/31 11:44:05 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ class ClapTrap
 		ClapTrap(const ClapTrap &src);
 		ClapTrap &operator=(const ClapTrap &rhs);
 		~ClapTrap();
-	//Public member function:
+	//Methods:
 		void attack(const std::string& target);
 		void takeDamage(unsigned int amount);
 		void beRepaired(unsigned int amount);

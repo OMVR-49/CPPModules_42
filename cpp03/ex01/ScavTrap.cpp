@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 10:15:11 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/01/31 11:10:03 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/01/31 12:12:22 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,10 @@ ScavTrap::ScavTrap(const std::string &Name)
 	this->maxEnergyPoints = 50;
 	this->maxHitPoints = 100;
 	std::cout<< "\033[92m" << "ScavTrap Paramerezied Constructor\033[0m"<<std::endl;
+	std::cout << "Name : "<< Name << std::endl;
+	std::cout << "hitPoints = " << hitPoints << std::endl;
+	std::cout << "energyPoints = " << energyPoints << std::endl;
+	std::cout << "attackDamage = " << attackDamage << std::endl << std::endl;
 }
 
 ScavTrap::~ScavTrap() 
@@ -41,6 +45,7 @@ ScavTrap::~ScavTrap()
 
 ScavTrap::ScavTrap(const ScavTrap& copy) 
 {
+	std::cout << "\033[92mScavTrap Copy Constructor Called\033[0m" << std::endl;
 	*this = copy;
 }
 

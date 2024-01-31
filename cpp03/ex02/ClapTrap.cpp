@@ -6,13 +6,13 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 10:15:18 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/01/31 11:15:10 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/01/31 12:12:40 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ClapTrap.hpp"
 
-// EX00:
+// EX02:
 
 ClapTrap:: ClapTrap() : Name("") , hitPoints(10) , energyPoints(10) , attackDamage(0),
 maxEnergyPoints(10) , maxHitPoints(10)
@@ -38,6 +38,7 @@ ClapTrap:: ~ClapTrap()
 
 ClapTrap::ClapTrap(const ClapTrap& copy)
 {
+	std::cout << "\033[93mClapTrap Copy Constructor Called\033[0m" << std::endl;
 	*this = copy;
 }
 

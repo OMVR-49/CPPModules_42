@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 10:12:23 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/01/31 10:46:26 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/01/31 11:17:40 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ int main()
 	k.attack("enemy");
 	c.takeDamage(0);
 	c.beRepaired(20);
-	// c.highFivesGuys();
+	c.highFivesGuys();
 	v.attack("enemy");
 	c.beRepaired(85);
-	// k.highFivesGuys();
+	k.highFivesGuys();
 	c.beRepaired(20);
 	k.takeDamage(99);
 	c.beRepaired(100);
