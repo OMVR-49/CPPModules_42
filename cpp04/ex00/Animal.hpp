@@ -1,0 +1,35 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Animal.hpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/01 12:03:09 by ojebbari          #+#    #+#             */
+/*   Updated: 2024/02/01 14:49:01 by ojebbari         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef ANIMAL_HPP
+#define ANIMAL_HPP
+
+#include<iostream>
+#include<string>
+
+class Animal 
+{
+	protected:
+		 std::string type;
+	public:
+	//OCCF:
+		Animal();
+		Animal(std::string& Name);
+		Animal(const Animal& copy);
+		Animal& operator=(const Animal& obj);
+		virtual ~Animal();
+	//Method:
+		virtual void makeSound() const;
+		std::string getType() const;
+};
+
+#endif
