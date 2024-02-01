@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 20:27:45 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/02/01 20:46:26 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/02/01 23:43:16 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,17 @@
 
 int main()
 {
-	const Animal* j = new Dog();
-    const Animal* i = new Cat();
+	Animal* j = new Dog();
+    Animal* i = new Cat();
     delete j;
     delete i;
 
-	Animal* animals[4] = {new Dog(), new Dog(), new Cat(), new Cat()};
-    for (int k = 0; k < 4; ++k) 
+    std::cout << "------------------------" << std::endl;
+	Animal* animals[] = {new Dog(), new Dog(), new Cat(), new Cat()};
+    for (int k = 0; k < 4; ++k)
 	{
         animals[k]->makeSound();
         delete animals[k];
     }
+    return 0;
 }

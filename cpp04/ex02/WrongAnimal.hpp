@@ -1,35 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Animal.hpp                                         :+:      :+:    :+:   */
+/*   WrongAnimal.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/01 12:03:09 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/02/02 00:22:58 by ojebbari         ###   ########.fr       */
+/*   Created: 2024/02/01 13:40:28 by ojebbari          #+#    #+#             */
+/*   Updated: 2024/02/01 13:49:26 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ANIMAL_HPP
-#define ANIMAL_HPP
+#ifndef WRONGANIMAL_HPP
+#define WRONGANIMAL_HPP
 
 #include<iostream>
 #include<string>
-#include "Brain.hpp"
 
-class Animal 
+class WrongAnimal 
 {
 	protected:
-		 std::string type;
+		std::string type;
 	public:
 	//OCCF:
-		Animal();
-		Animal(std::string& Name);
-		Animal(const Animal& copy);
-		Animal& operator=(const Animal& obj);
-		virtual ~Animal();
+		WrongAnimal();
+		WrongAnimal(const WrongAnimal& copy);
+		WrongAnimal& operator=(const WrongAnimal& obj);
+		~WrongAnimal();
 	//Method:
-		virtual void makeSound() const;
+		void makeSound() const;
 		std::string getType() const;
 };
 

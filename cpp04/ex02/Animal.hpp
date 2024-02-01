@@ -1,33 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   Animal.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/01 22:29:30 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/02/02 00:07:45 by ojebbari         ###   ########.fr       */
+/*   Created: 2024/02/01 12:03:09 by ojebbari          #+#    #+#             */
+/*   Updated: 2024/02/01 23:58:11 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Animal.hpp"
-#include "Dog.hpp"
-#include "Cat.hpp"
+#ifndef ANIMAL_HPP
+#define ANIMAL_HPP
+
+#include<iostream>
+#include<string>
 #include "Brain.hpp"
 
-int main()
+class Animal 
 {
-	Animal* j = new Dog();
-    Animal* i = new Cat();
-    delete j;
-    delete i;
+	protected:
+		 std::string type;
+	public:
+	//OCCF:
+		Animal();
+		Animal(std::string& Name);
+		Animal(const Animal& copy);
+		Animal& operator=(const Animal& obj);
+		virtual ~Animal();
+	//Method:
+		virtual void makeSound() const = 0;
+		std::string getType() const;
+};
 
-    std::cout << "------------------------" << std::endl;
-	Animal* animals[] = {new Dog(), new Dog(), new Cat(), new Cat()};
-    for (int k = 0; k < 4; ++k)
-	{
-        animals[k]->makeSound();
-        delete animals[k];
-    }
-    return 0;
-}
+#endif

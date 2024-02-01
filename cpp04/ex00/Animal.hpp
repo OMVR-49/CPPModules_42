@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 12:03:09 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/02/01 14:49:01 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/02/01 23:13:33 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 class Animal 
 {
 	protected:
-		 std::string type;
+		std::string type;
 	public:
 	//OCCF:
 		Animal();

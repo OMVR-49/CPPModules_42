@@ -1,49 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Cat.cpp                                            :+:      :+:    :+:   */
+/*   WrongCat.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/01 12:05:24 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/02/01 22:35:19 by ojebbari         ###   ########.fr       */
+/*   Created: 2024/02/01 13:46:11 by ojebbari          #+#    #+#             */
+/*   Updated: 2024/02/01 13:55:55 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Cat.hpp"
+#include "WrongCat.hpp"
 
-Cat::Cat() 
+WrongCat::WrongCat() 
 {
-	_Brain = new Brain();
 	type = "Cat";
 	std::cout << "Cat Default Constructor" << std::endl;
 }
 
-Cat::~Cat() 
+WrongCat::~WrongCat() 
 {
 	std::cout << "Cat Destructor" << std::endl;
-	delete _Brain;
 }
 
-Cat::Cat(const Cat& copy) 
+WrongCat::WrongCat(const WrongCat& copy) 
 {
 	std::cout << "Cat Copy Constructor" << std::endl;
-	this->_Brain = new Brain(*copy._Brain);
-	this->type = copy.type;
+	*this = copy;
 }
 
-Cat& Cat::operator=(const Cat& obj) 
+WrongCat& WrongCat::operator=(const WrongCat& obj) 
 {
 	std::cout << "Cat assignment operator" << std::endl;
 	if (this != &obj)
-	{
-		*_Brain = *obj._Brain;
 		this->type = obj.type;
-	}
 	return (*this);
 }
 
-void Cat::makeSound() const
+void WrongCat::makeSound() const
 {
 	std::cout << "Meow , Meow ! GRR GRR" << std::endl;
 }

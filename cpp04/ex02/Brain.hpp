@@ -1,36 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Animal.hpp                                         :+:      :+:    :+:   */
+/*   Brain.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/01 12:03:09 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/02/02 00:22:58 by ojebbari         ###   ########.fr       */
+/*   Created: 2024/02/01 14:51:47 by ojebbari          #+#    #+#             */
+/*   Updated: 2024/02/01 17:18:50 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ANIMAL_HPP
-#define ANIMAL_HPP
-
+#ifndef BRAIN_HPP
+#define BRAIN_HPP
 #include<iostream>
 #include<string>
-#include "Brain.hpp"
 
-class Animal 
+class Brain 
 {
 	protected:
-		 std::string type;
+		 std::string ideas[100];
 	public:
-	//OCCF:
-		Animal();
-		Animal(std::string& Name);
-		Animal(const Animal& copy);
-		Animal& operator=(const Animal& obj);
-		virtual ~Animal();
-	//Method:
-		virtual void makeSound() const;
-		std::string getType() const;
+	// OCCF:
+		Brain();
+		~Brain();
+		Brain(const Brain& copy);
+		Brain& operator=(const Brain& obj);
 };
 
 #endif

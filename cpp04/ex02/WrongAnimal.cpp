@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 13:48:01 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/02/01 23:41:44 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/02/01 13:55:40 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ WrongAnimal& WrongAnimal::operator=(const WrongAnimal& obj)
 
 void WrongAnimal::makeSound() const
 {
-	std::cout << "WrongAnimal Sound" << std::endl;
+	std::cout << "Animal Sound" << std::endl;
 }
 
 std::string WrongAnimal::getType() const

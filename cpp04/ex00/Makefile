@@ -6,7 +6,7 @@
 #    By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/31 22:42:54 by ojebbari          #+#    #+#              #
-#    Updated: 2024/02/01 13:55:07 by ojebbari         ###   ########.fr        #
+#    Updated: 2024/02/01 23:27:56 by ojebbari         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,12 +39,12 @@ all : $(NAME)
 $(NAME) : $(OBJ) Animal.hpp Cat.hpp Dog.hpp
 	@printf "$(CURSIVE)$(GREEN)  	- Compiling :$(RESET)\n"
 	@printf "$(WHITE)\n"
-	@printf "$(RED)			 _____ ____________   _____  __        __  _______   _______  _____ \n"
-	@printf "$(RED)			/  __ \| ___ \ ___ \ |  _  |/  |      / / |  ___\ \ / /  _  ||  _  |\n"
-	@printf "$(RED)			| /  \/| |_/ / |_/ / | |/' | | |     / /  | |__  \ V /| |/' || |/' |\n"
-	@printf "$(RED)			| |    |  __/|  __/  |  /| | | |    / /   |  __| /   \|  /| ||  /| |\n"
-	@printf "$(RED)			| \__/\| |   | |     \ |_/ /_| |_  / /    | |___/ /^\ \ |_/ /\ |_/ /\n"
-	@printf "$(RED)		 	 \____/\_|   \_|      \___/ \___/ /_/     \____/\/   \/\___/  \___/ \n"
+	@printf "$(RED)			 _____ ____________  \n"
+	@printf "$(RED)			/  __ \| ___ \ ___ \ \n"
+	@printf "$(RED)			| /  \/| |_/ / |_/ / \n"
+	@printf "$(RED)			| |    |  __/|  __/  \n"
+	@printf "$(RED)			| \__/\| |   | |     \n"
+	@printf "$(RED)		 	 \____/\_|   \_|     \n"
 	@printf "$(WHITE)\n"
 
 	@$(CC) $(CPPFLAGS) $(OBJ) -o $@
