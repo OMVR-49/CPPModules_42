@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 12:05:24 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/02/01 22:35:19 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/02/02 01:31:44 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,7 @@ Cat::~Cat()
 Cat::Cat(const Cat& copy) 
 {
 	std::cout << "Cat Copy Constructor" << std::endl;
-	this->_Brain = new Brain(*copy._Brain);
-	this->type = copy.type;
+	*this = copy;
 }
 
 Cat& Cat::operator=(const Cat& obj) 
@@ -37,7 +36,7 @@ Cat& Cat::operator=(const Cat& obj)
 	std::cout << "Cat assignment operator" << std::endl;
 	if (this != &obj)
 	{
-		*_Brain = *obj._Brain;
+		this->_Brain = new Brain(*obj._Brain);
 		this->type = obj.type;
 	}
 	return (*this);

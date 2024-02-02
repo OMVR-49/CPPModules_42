@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 12:03:09 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/02/01 23:13:33 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/02/02 01:46:55 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ class Animal
 	public:
 	//OCCF:
 		Animal();
-		Animal(std::string& Name);
 		Animal(const Animal& copy);
 		Animal& operator=(const Animal& obj);
 		virtual ~Animal();

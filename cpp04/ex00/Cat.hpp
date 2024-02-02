@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 12:03:59 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/02/01 13:34:12 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/02/02 01:47:14 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ class Cat : public Animal
 	public:
 	// OCCF:
 		Cat();
-		Cat(std::string& Name);
 		Cat(const Cat& copy);
 		Cat& operator=(const Cat& obj);
 		~Cat();

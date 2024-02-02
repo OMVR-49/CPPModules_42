@@ -6,7 +6,7 @@
 #    By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/31 22:42:54 by ojebbari          #+#    #+#              #
-#    Updated: 2024/02/01 23:27:56 by ojebbari         ###   ########.fr        #
+#    Updated: 2024/02/02 02:29:25 by ojebbari         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,11 +32,11 @@ WHITE		=	\e[37m
 
 all : $(NAME)
 
-%.o : %.cpp Animal.hpp Cat.hpp Dog.hpp
+%.o : %.cpp Animal.hpp Cat.hpp Dog.hpp WrongAnimal.hpp WrongCat.hpp
 	@printf "$(CURSIVE)$(GRAY) 	- Making object file $@ from source file $< ... $(RESET)\n"
 	@$(CC) $(CPPFLAGS)  -c $< -o $@
 
-$(NAME) : $(OBJ) Animal.hpp Cat.hpp Dog.hpp
+$(NAME) : $(OBJ) Animal.hpp Cat.hpp Dog.hpp WrongAnimal.hpp WrongCat.hpp
 	@printf "$(CURSIVE)$(GREEN)  	- Compiling :$(RESET)\n"
 	@printf "$(WHITE)\n"
 	@printf "$(RED)			 _____ ____________  \n"

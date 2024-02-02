@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 12:01:41 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/02/01 20:44:32 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/02/02 02:19:50 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,6 @@ Animal& Animal::operator=(const Animal& obj)
 	if (this != &obj) 
 		this->type = obj.type;
 	return (*this);
-}
-
-void Animal::makeSound() const
-{
-	std::cout << "Animal Sound" << std::endl;
 }
 
 std::string Animal::getType() const

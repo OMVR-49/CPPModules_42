@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 13:48:01 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/02/01 23:41:44 by ojebbari         ###   ########.fr       */
+/*   Updated: 2024/02/02 02:21:28 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,23 @@
 
 WrongAnimal::WrongAnimal() : type("Animal")
 {
-	std::cout << "Animal Default Constructor" << std::endl;
+	std::cout << "WrongAnimal Default Constructor" << std::endl;
 }
 
 WrongAnimal::~WrongAnimal() 
 {
-	std::cout << "Animal Destructor" << std::endl;
+	std::cout << "WrongAnimal Destructor" << std::endl;
 }
 
 WrongAnimal::WrongAnimal(const WrongAnimal& copy) 
 {
-	std::cout << "Animal Copy Constructor" << std::endl;
+	std::cout << "WrongAnimal Copy Constructor" << std::endl;
 	*this = copy;
 }
 
 WrongAnimal& WrongAnimal::operator=(const WrongAnimal& obj)
 {
-	std::cout << "Animal assignment operator" << std::endl;
+	std::cout << "WrongAnimal assignment operator" << std::endl;
 	if (this != &obj) 
 		this->type = obj.type;
 	return (*this);
