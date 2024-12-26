@@ -1,15 +1,11 @@
 #include "ScalarConverter.hpp"
 
-int main()
+int main(int ac, char **av)
 {
-    ScalarConverter::convert("42");     // Converts integer literal
-    ScalarConverter::convert("3.14f");  // Converts float literal
-    ScalarConverter::convert("'A'");    // Converts character literal
-    ScalarConverter::convert("-inf");   // Converts special numeric literal
-
-    ScalarConverter::convert("0");
-    ScalarConverter::convert("nan");
-    ScalarConverter::convert("42.0f");
-    ScalarConverter::convert("'c'");
-
+    if (ac != 2)
+    {
+        std::cout << "Usage: ./convert <literal>" << std::endl;
+        return ;
+    }
+    ScalarConverter::convert(av[1]);
 }
