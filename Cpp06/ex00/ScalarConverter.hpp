@@ -3,7 +3,10 @@
 
 #include <string>
 #include <iostream>
-#include <exception>
+#include <cstdlib>     // for strtod
+#include <limits>       // for INT_MAX, INT_MIN
+#include <cmath>       // for std::isnan, std::floor
+#include <cctype>      // for std::isalpha, std::isdigit
 
 class ScalarConverter
 {
