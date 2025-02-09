@@ -5,8 +5,8 @@ int main()
     Data* data = new Data;
     data->value = 42;
 
-    std::cout << "Original pointer: " << data << std::endl;
-    std::cout << "Original value: " << data->value << std::endl;
+    std::cout << "Data pointer: " << data << std::endl;
+    std::cout << "Data value: " << data->value << std::endl;
 
     // Serialize
     uintptr_t serialized = Serializer::serialize(data);

@@ -6,7 +6,7 @@
 #include <stdint.h>
 
 struct Data {
-       int value;  // or any other data members you want
+       int value;
    };
 
 class Serializer

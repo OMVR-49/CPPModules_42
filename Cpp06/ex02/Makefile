@@ -20,18 +20,18 @@ WHITE		=	\e[37m
 
 all : $(NAME)
 
-%.o : %.cpp Base.hpp
+%.o : %.cpp Base.hpp A.hpp B.hpp C.hpp
 	@printf "$(CURSIVE)$(GRAY) 	- Making object file $@ from source file $< ... $(RESET)\n"
 	@$(CC) $(CPPFLAGS)  -c $< -o $@
 
-$(NAME) : $(OBJ) Base.hpp
+$(NAME) : $(OBJ) Base.hpp A.hpp B.hpp C.hpp
 	@printf "$(CURSIVE)$(GREEN)  	- Compiling :$(RESET)\n"
-	@printf "$(RED)			 _____ ____________   _____  _____.   __  _______   _______  _____ \n"
-	@printf "$(RED)			/  __ \| ___ \ ___ \ |  _  |/ ___|   / / |  ___\ \ / /  _  ||  _  | \n"
-	@printf "$(RED)			| /  \/| |_/ / |_/ / | |/' / /___   / /  | |__  \ V /| |/' || |/' | \n"
-	@printf "$(RED)			| |    |  __/|  __/  |  /| | ___ \ / /   |  __| /   \|  /| || |/| | \n"
-	@printf "$(RED)			| \__/\| |   | |     \ |_/ / \_/ |/ /    | |___/ /^\ \ |_/ /\ |_/ / \n"
-	@printf "$(RED)		 	 \____/\_|   \_|      \___/\_____/ /     \____/\/   \/\___/  \___/  \n"
+	@printf "$(RED)			 _____ ____________   _____  _____ \n"
+	@printf "$(RED)			/  __ \| ___ \ ___ \ |  _  |/ ___| \n"
+	@printf "$(RED)			| /  \/| |_/ / |_/ / | |/' / /___  \n"
+	@printf "$(RED)			| |    |  __/|  __/  |  /| | ___ \ \n"
+	@printf "$(RED)			| \__/\| |   | |     \ |_/ / \_/ | \n"
+	@printf "$(RED)		 	 \____/\_|   \_|      \___/\_____/ \n"
 	@printf "$(WHITE)\n"
 
 	@$(CC) $(CPPFLAGS) $(OBJ) -o $@

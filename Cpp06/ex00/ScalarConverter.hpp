@@ -5,8 +5,7 @@
 #include <iostream>
 #include <cstdlib>     // for strtod
 #include <limits>       // for INT_MAX, INT_MIN
-#include <climits>       // for CHAR_MAX, CHAR_MIN
-#include <cmath>       // for std::isnan, std::floor
+#include <cmath>       // for std::floor
 #include <cctype>      // for std::isalpha, std::isdigit
 
 class ScalarConverter
