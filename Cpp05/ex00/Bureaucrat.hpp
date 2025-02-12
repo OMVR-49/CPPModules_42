@@ -6,7 +6,7 @@
 /*   By: ojebbari <ojebbari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 04:47:05 by ojebbari          #+#    #+#             */
-/*   Updated: 2024/11/11 00:22:22 by ojebbari         ###   ########.fr       */
+/*   Updated: 2025/02/12 03:35:14 by ojebbari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ class Bureaucrat
 	void decrement(int amount);
 	// Exceptions:
 	class GradeTooHighException : public std::exception{
-            const char* what() const throw();
+        const char* what() const throw();
     };
     class GradeTooLowException : public std::exception{
             const char* what() const throw();
