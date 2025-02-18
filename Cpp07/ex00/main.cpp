@@ -1,8 +1,9 @@
 #include "whatever.hpp"
+#include <string>
 
 int main( void ) {
-    int a = 2.3;
-    int b = 3.2;
+    double a = 2.5;
+    double b = 2.3;
 
     ::swap( a, b );
 

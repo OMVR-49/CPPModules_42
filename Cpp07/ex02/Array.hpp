@@ -8,7 +8,7 @@ template <typename T>
 class Array {
 private:
     T* array;
-    size_t Size;
+    int Size;
 public:
     Array();
     Array(unsigned int n);
@@ -17,8 +17,9 @@ public:
 
     Array& operator=(const Array& other);
     
-    size_t size() const;
-    T& operator[](size_t index);
+    int size() const;
+    T& operator[](int index);
+    const T& operator[](int index) const;
     class outOfSize : public std::exception
     {
         public:

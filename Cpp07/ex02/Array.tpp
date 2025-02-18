@@ -21,7 +21,6 @@ Array<T>::~Array()
     delete[] array;
 }
 
-
 template<typename T>
 Array<T>& Array<T>::operator=(const Array& other)
 {
@@ -30,20 +29,28 @@ Array<T>& Array<T>::operator=(const Array& other)
         delete[] array;
         Size = other.Size;
         array = new T[Size];
-        for (size_t i = 0; i < Size; i++)
+        for (int i = 0; i < Size; i++)
             array[i] = other.array[i];
     }
     return (*this);
 }
 
 template<typename T>
-size_t Array<T>::size() const
+int Array<T>::size() const
 {
     return Size;
 }
 
 template <typename T>
-T& Array<T>::operator[](size_t index) 
+T& Array<T>::operator[](int index) 
+{
+    if (index >= Size)
+        throw outOfSize();
+    return (array[index]);
+}
+
+template <typename T>
+const T& Array<T>::operator[](int index) const
 {
     if (index >= Size)
         throw outOfSize();
