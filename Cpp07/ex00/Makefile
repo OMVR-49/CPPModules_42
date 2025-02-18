@@ -11,7 +11,7 @@ all : $(NAME)
 	$(CC) $(CPPFLAGS)  -c $< -o $@
 
 $(NAME) : $(OBJ) whatever.hpp
-	$(CC) $(CPPFLAGS) $(OBJ) -o $@
+	$(CC) $(OBJ) -o $@
 
 clean :
 	@$(RM) $(OBJ)

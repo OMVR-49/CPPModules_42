@@ -6,7 +6,7 @@ int main( void ) {
     double b = 2.3;
 
     ::swap( a, b );
-
+ 
     std::cout << "a = " << a << ", b = " << b << std::endl;
 
     std::cout << "min( a, b ) = " << ::min( a, b ) << std::endl;
