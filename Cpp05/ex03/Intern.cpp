@@ -52,3 +52,5 @@ AForm* Intern::makeForm(std::string formName, std::string target)
     std::cout << "Intern creates " << formName << std::endl;
     return (this->*forms[formIndex])(target);
 }
+
+
