@@ -2894,3 +2894,817 @@ ClassName operator=(const ClassName& rhs) {
 ---
 
 *This module provides essential error handling mechanisms and advanced C++ features for building robust, maintainable applications.*
+
+# CPP Module 06
+
+**Topics Covered:** Type casting, static_cast, dynamic_cast, const_cast, reinterpret_cast, uintptr_t, virtual destructors
+
+> *"Casting provides powerful tools for type conversion, but with great power comes great responsibility"*
+
+## Overview
+
+In this module, we explore C++ casting mechanisms that allow developers to convert variables from one type to another effectively. We'll cover different casting types, each designed for specific scenarios with varying levels of safety and explicitness, along with related concepts like virtual destructors and low-level memory manipulation.
+
+## What is Casting in C++
+
+**Casting** refers to the process of converting a variable from one type to another. It is an essential part of programming as it allows developers to handle data of different types effectively.
+
+### Why Casting is Important:
+- **Data type compatibility**: Enables interaction between different data types
+- **Memory management**: Allows low-level memory manipulation when needed
+- **API compatibility**: Helps interface with different libraries and systems
+- **Polymorphism support**: Enables safe type conversions in inheritance hierarchies
+
+C++ provides several types of casting mechanisms, each designed for specific scenarios and with different levels of safety and explicitness.
+
+## Types of Casting in C++
+
+### 1. Implicit Casting (Type Conversion)
+
+**Implicit casting**, also known as "type coercion," happens automatically when the compiler converts a value from one type to another, as long as there is no data loss or ambiguity.
+
+#### Characteristics:
+- Performed automatically by the compiler
+- Only occurs when conversion is considered "safe"
+- No explicit syntax required
+- Limited to compatible types
+
+#### Example:
+
+```cpp
+#include <iostream>
+
+int main() {
+    // Implicit conversions that are considered safe
+    int a = 42;
+    double b = a;        // int to double (safe - no data loss)
+    float c = 3.14f;
+    double d = c;        // float to double (safe - wider range)
+    
+    char ch = 'A';
+    int ascii = ch;      // char to int (safe - ASCII conversion)
+    
+    std::cout << "a: " << a << std::endl;           // 42
+    std::cout << "b: " << b << std::endl;           // 42.0
+    std::cout << "c: " << c << std::endl;           // 3.14
+    std::cout << "d: " << d << std::endl;           // 3.14
+    std::cout << "ch: " << ch << std::endl;         // A
+    std::cout << "ascii: " << ascii << std::endl;   // 65
+    
+    return 0;
+}
+```
+
+#### When Implicit Casting Fails:
+
+```cpp
+#include <iostream>
+
+int main() {
+    double pi = 3.14159;
+    // int truncated = pi;  // Warning: potential data loss
+    
+    const int value = 100;
+    // int& ref = value;    // Error: cannot remove const implicitly
+    
+    int* ptr = nullptr;
+    // int num = ptr;       // Error: cannot convert pointer to int
+    
+    return 0;
+}
+```
+
+### 2. Explicit Casting (C-Style Casting)
+
+**C-style casting** uses parentheses to explicitly specify the target type. It is less safe and does not distinguish between different types of casts.
+
+#### Syntax:
+```cpp
+(type)value;
+```
+
+#### Characteristics:
+- Inherited from C language
+- Very powerful but potentially dangerous
+- No compile-time type checking
+- Can perform multiple cast types in one operation
+
+#### Example:
+
+```cpp
+#include <iostream>
+
+int main() {
+    // Basic C-style casting
+    double pi = 3.14159;
+    int intPi = (int)pi;              // Truncates decimal part
+    
+    char ch = (char)65;               // ASCII to character
+    
+    // Potentially dangerous casts
+    int num = 42;
+    char* charPtr = (char*)&num;      // Reinterprets int as char pointer
+    
+    const int constVal = 100;
+    int* nonConstPtr = (int*)&constVal; // Removes const qualifier
+    
+    std::cout << "pi: " << pi << std::endl;           // 3.14159
+    std::cout << "intPi: " << intPi << std::endl;     // 3
+    std::cout << "ch: " << ch << std::endl;           // A
+    
+    return 0;
+}
+```
+
+#### Problems with C-Style Casting:
+- **No type safety**: Can perform dangerous conversions
+- **Hidden complexity**: May perform multiple cast operations
+- **Hard to debug**: Difficult to identify cast-related issues
+- **Poor readability**: Doesn't express intent clearly
+
+### 3. Static Cast
+
+**static_cast** is a safer and more explicit way to perform type conversions. It is used for conversions that are well-defined and do not involve casting away constness or performing dynamic checks.
+
+#### Syntax:
+```cpp
+static_cast<new_type>(value);
+```
+
+#### Characteristics:
+- Compile-time type checking
+- Safer than C-style casts
+- Cannot cast away const or volatile qualifiers
+- Cannot perform unsafe pointer conversions
+
+#### Use Cases and Examples:
+
+```cpp
+#include <iostream>
+#include <vector>
+
+class Base {
+public:
+    virtual ~Base() {}
+    virtual void show() { std::cout << "Base class" << std::endl; }
+};
+
+class Derived : public Base {
+public:
+    void show() override { std::cout << "Derived class" << std::endl; }
+    void derivedMethod() { std::cout << "Derived-specific method" << std::endl; }
+};
+
+int main() {
+    // 1. Scalar type conversions
+    float f = 5.67f;
+    int i = static_cast<int>(f);              // float to int
+    double d = static_cast<double>(i);        // int to double
+    
+    std::cout << "f: " << f << ", i: " << i << ", d: " << d << std::endl;
+    
+    // 2. Pointer conversions in inheritance hierarchy
+    Derived derivedObj;
+    Base* basePtr = &derivedObj;              // Implicit upcast (safe)
+    Derived* derivedPtr = static_cast<Derived*>(basePtr);  // Explicit downcast
+    
+    basePtr->show();                          // Calls Derived::show()
+    derivedPtr->derivedMethod();              // Access derived-specific method
+    
+    // 3. Void pointer conversions
+    int value = 42;
+    void* voidPtr = &value;
+    int* intPtr = static_cast<int*>(voidPtr); // void* to int*
+    std::cout << "Value through void*: " << *intPtr << std::endl;
+    
+    // 4. Enum conversions
+    enum Color { RED = 1, GREEN = 2, BLUE = 3 };
+    int colorValue = static_cast<int>(RED);   // enum to int
+    Color color = static_cast<Color>(2);      // int to enum (careful!)
+    
+    std::cout << "Color value: " << colorValue << std::endl;
+    
+    return 0;
+}
+```
+
+#### When static_cast Won't Work:
+
+```cpp
+#include <iostream>
+
+int main() {
+    const int constValue = 100;
+    // int* ptr = static_cast<int*>(&constValue);  // Error: cannot cast away const
+    
+    int value = 42;
+    // char* charPtr = static_cast<char*>(&value); // Error: unrelated pointer types
+    
+    // Use const_cast and reinterpret_cast for these cases
+    return 0;
+}
+```
+
+### 4. Dynamic Cast
+
+**dynamic_cast** is used for safely converting pointers or references of polymorphic types (i.e., classes with virtual functions). It performs runtime type checking and returns `nullptr` if the conversion is not valid.
+
+#### Syntax:
+```cpp
+dynamic_cast<new_type>(value);
+```
+
+#### Characteristics:
+- Runtime type checking
+- Only works with polymorphic types (classes with virtual functions)
+- Returns nullptr for invalid pointer conversions
+- Throws std::bad_cast for invalid reference conversions
+- Safest cast for inheritance hierarchies
+
+#### Comprehensive Example:
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <memory>
+#include <typeinfo>
+
+class Animal {
+public:
+    virtual ~Animal() = default;  // Makes class polymorphic
+    virtual void makeSound() = 0;
+    virtual std::string getType() const = 0;
+};
+
+class Dog : public Animal {
+public:
+    void makeSound() override { std::cout << "Woof!" << std::endl; }
+    std::string getType() const override { return "Dog"; }
+    void wagTail() { std::cout << "Wagging tail!" << std::endl; }
+};
+
+class Cat : public Animal {
+public:
+    void makeSound() override { std::cout << "Meow!" << std::endl; }
+    std::string getType() const override { return "Cat"; }
+    void purr() { std::cout << "Purring..." << std::endl; }
+};
+
+class Fish : public Animal {
+public:
+    void makeSound() override { std::cout << "Blub blub!" << std::endl; }
+    std::string getType() const override { return "Fish"; }
+    void swim() { std::cout << "Swimming..." << std::endl; }
+};
+
+void identifyAndInteract(Animal* animal) {
+    if (!animal) return;
+    
+    std::cout << "Animal type: " << animal->getType() << std::endl;
+    animal->makeSound();
+    
+    // Safe downcasting with dynamic_cast
+    if (Dog* dog = dynamic_cast<Dog*>(animal)) {
+        std::cout << "It's a dog! ";
+        dog->wagTail();
+    }
+    else if (Cat* cat = dynamic_cast<Cat*>(animal)) {
+        std::cout << "It's a cat! ";
+        cat->purr();
+    }
+    else if (Fish* fish = dynamic_cast<Fish*>(animal)) {
+        std::cout << "It's a fish! ";
+        fish->swim();
+    }
+    else {
+        std::cout << "Unknown animal type!" << std::endl;
+    }
+    
+    std::cout << "---" << std::endl;
+}
+
+int main() {
+    // Create different animals
+    std::vector<std::unique_ptr<Animal>> animals;
+    animals.push_back(std::make_unique<Dog>());
+    animals.push_back(std::make_unique<Cat>());
+    animals.push_back(std::make_unique<Fish>());
+    
+    // Identify and interact with each animal
+    for (auto& animal : animals) {
+        identifyAndInteract(animal.get());
+    }
+    
+    // Demonstrate failed dynamic_cast
+    std::cout << "=== Failed Cast Example ===" << std::endl;
+    Dog dog;
+    Animal* animalPtr = &dog;
+    
+    Cat* catPtr = dynamic_cast<Cat*>(animalPtr);  // Will return nullptr
+    if (catPtr) {
+        std::cout << "Successfully cast to Cat" << std::endl;
+    } else {
+        std::cout << "Failed to cast to Cat (as expected)" << std::endl;
+    }
+    
+    return 0;
+}
+```
+
+#### Dynamic Cast with References:
+
+```cpp
+#include <iostream>
+#include <stdexcept>
+
+class Base {
+public:
+    virtual ~Base() = default;
+};
+
+class Derived : public Base {
+public:
+    void specificMethod() { std::cout << "Derived method called" << std::endl; }
+};
+
+void processReference(Base& base) {
+    try {
+        // dynamic_cast with references throws exception on failure
+        Derived& derived = dynamic_cast<Derived&>(base);
+        derived.specificMethod();
+    }
+    catch (const std::bad_cast& e) {
+        std::cout << "Bad cast exception: " << e.what() << std::endl;
+    }
+}
+
+int main() {
+    Derived d;
+    Base b;
+    
+    std::cout << "Casting derived reference:" << std::endl;
+    processReference(d);  // Success
+    
+    std::cout << "Casting base reference:" << std::endl;
+    processReference(b);  // Throws std::bad_cast
+    
+    return 0;
+}
+```
+
+### 5. Const Cast
+
+**const_cast** is used to add or remove the `const` qualifier from a variable. This is particularly useful for API compatibility but should be used cautiously.
+
+#### Syntax:
+```cpp
+const_cast<new_type>(value);
+```
+
+#### Characteristics:
+- Only modifies const/volatile qualifiers
+- Does not change the underlying type
+- Should be used sparingly and carefully
+- Undefined behavior if you modify originally const data
+
+#### Use Cases and Examples:
+
+```cpp
+#include <iostream>
+#include <cstring>
+
+// Legacy C function that doesn't use const (but doesn't modify data)
+void legacyPrintFunction(char* str) {
+    std::cout << "Legacy output: " << str << std::endl;
+}
+
+// Function that needs to modify data temporarily
+void processData(const std::string& data) {
+    // Need to interface with legacy API that requires non-const
+    char* modifiableData = const_cast<char*>(data.c_str());
+    
+    // Safe because we're not actually modifying it
+    legacyPrintFunction(modifiableData);
+    
+    // DO NOT DO THIS - undefined behavior:
+    // modifiableData[0] = 'X';  // DANGEROUS!
+}
+
+class DataManager {
+private:
+    mutable int accessCount;  // Can be modified in const methods
+    std::string data;
+
+public:
+    DataManager(const std::string& d) : data(d), accessCount(0) {}
+    
+    // Const method that needs to modify mutable member
+    const std::string& getData() const {
+        ++accessCount;  // OK - accessCount is mutable
+        return data;
+    }
+    
+    // Sometimes you need const_cast for complex scenarios
+    void complexConstOperation() const {
+        DataManager* nonConstThis = const_cast<DataManager*>(this);
+        // Only modify mutable members or perform non-modifying operations
+        nonConstThis->accessCount++;
+    }
+    
+    int getAccessCount() const { return accessCount; }
+};
+
+int main() {
+    // 1. API compatibility example
+    const std::string message = "Hello, World!";
+    processData(message);
+    
+    // 2. Removing const from references
+    const int constValue = 42;
+    int& nonConstRef = const_cast<int&>(constValue);
+    std::cout << "Value: " << nonConstRef << std::endl;
+    
+    // WARNING: Modifying nonConstRef is undefined behavior!
+    // nonConstRef = 100;  // DANGEROUS - undefined behavior
+    
+    // 3. Working with const objects
+    const DataManager manager("Important Data");
+    std::cout << "Data: " << manager.getData() << std::endl;
+    std::cout << "Access count: " << manager.getAccessCount() << std::endl;
+    
+    return 0;
+}
+```
+
+#### When const_cast is Dangerous:
+
+```cpp
+#include <iostream>
+
+int main() {
+    // DANGEROUS: Modifying originally const data
+    const int originallyConst = 100;
+    int* ptr = const_cast<int*>(&originallyConst);
+    
+    std::cout << "Before: " << originallyConst << std::endl;
+    
+    // This is undefined behavior!
+    // *ptr = 200;  // DON'T DO THIS
+    
+    // SAFE: Removing const from non-originally-const data
+    int originallyNonConst = 300;
+    const int* constPtr = &originallyNonConst;
+    int* nonConstPtr = const_cast<int*>(constPtr);
+    *nonConstPtr = 400;  // OK - data wasn't originally const
+    
+    std::cout << "Modified: " << originallyNonConst << std::endl;
+    
+    return 0;
+}
+```
+
+### 6. Reinterpret Cast
+
+**reinterpret_cast** is used for low-level casting that reinterprets the bit pattern of the object. It is considered unsafe and should be used only when absolutely necessary.
+
+#### Syntax:
+```cpp
+reinterpret_cast<new_type>(value);
+```
+
+#### Characteristics:
+- Lowest-level cast operation
+- Reinterprets bit patterns without conversion
+- Platform and implementation dependent
+- No safety checks whatsoever
+- Should be used only for system-level programming
+
+#### Use Cases and Examples:
+
+```cpp
+#include <iostream>
+#include <cstdint>
+
+struct Point {
+    int x, y;
+};
+
+int main() {
+    // 1. Pointer to integer conversion
+    int value = 42;
+    uintptr_t address = reinterpret_cast<uintptr_t>(&value);
+    std::cout << "Address of value: 0x" << std::hex << address << std::dec << std::endl;
+    
+    // Convert back to pointer
+    int* ptr = reinterpret_cast<int*>(address);
+    std::cout << "Value through converted pointer: " << *ptr << std::endl;
+    
+    // 2. Type punning (viewing same memory as different type)
+    Point p = {10, 20};
+    int* intArray = reinterpret_cast<int*>(&p);
+    std::cout << "Point as int array: [" << intArray[0] << ", " << intArray[1] << "]" << std::endl;
+    
+    // 3. Function pointer conversions
+    void (*funcPtr)() = reinterpret_cast<void(*)()>(address);
+    // Note: Calling this would be undefined behavior unless address points to valid function
+    
+    // 4. Byte-level access to objects
+    double d = 3.14159;
+    unsigned char* bytes = reinterpret_cast<unsigned char*>(&d);
+    std::cout << "Double as bytes: ";
+    for (size_t i = 0; i < sizeof(double); ++i) {
+        std::cout << std::hex << static_cast<int>(bytes[i]) << " ";
+    }
+    std::cout << std::dec << std::endl;
+    
+    // 5. Working with memory-mapped hardware (simulation)
+    const uintptr_t HARDWARE_REGISTER = 0x12345678;  // Simulated address
+    volatile uint32_t* registerPtr = reinterpret_cast<volatile uint32_t*>(HARDWARE_REGISTER);
+    // In real hardware programming: *registerPtr = 0xFF;
+    
+    return 0;
+}
+```
+
+#### Common reinterpret_cast Patterns:
+
+```cpp
+#include <iostream>
+#include <cstdint>
+
+// Serialize/deserialize functions
+void serializeInt(int value, unsigned char* buffer) {
+    unsigned char* valueBytes = reinterpret_cast<unsigned char*>(&value);
+    for (size_t i = 0; i < sizeof(int); ++i) {
+        buffer[i] = valueBytes[i];
+    }
+}
+
+int deserializeInt(const unsigned char* buffer) {
+    int result;
+    unsigned char* resultBytes = reinterpret_cast<unsigned char*>(&result);
+    for (size_t i = 0; i < sizeof(int); ++i) {
+        resultBytes[i] = buffer[i];
+    }
+    return result;
+}
+
+int main() {
+    int original = 305419896;  // 0x12345678
+    unsigned char buffer[sizeof(int)];
+    
+    // Serialize
+    serializeInt(original, buffer);
+    std::cout << "Serialized bytes: ";
+    for (size_t i = 0; i < sizeof(int); ++i) {
+        std::cout << std::hex << static_cast<int>(buffer[i]) << " ";
+    }
+    std::cout << std::dec << std::endl;
+    
+    // Deserialize
+    int reconstructed = deserializeInt(buffer);
+    std::cout << "Reconstructed value: " << reconstructed << std::endl;
+    std::cout << "Match: " << (original == reconstructed ? "Yes" : "No") << std::endl;
+    
+    return 0;
+}
+```
+
+## uintptr_t: Pointer-to-Integer Type
+
+**uintptr_t** is an unsigned integer type defined in `<cstdint>` that is capable of storing a pointer's value by representing the pointer as an integer.
+
+### Key Characteristics:
+- **Pointer storage**: Designed to store pointer values as integers
+- **Platform independent**: Size adapts to platform pointer size
+- **Standardized**: Defined in C++ standard library
+- **Reversible conversion**: Can convert back to pointer safely
+
+### Purpose and Use Cases:
+
+```cpp
+#include <iostream>
+#include <cstdint>
+#include <vector>
+#include <iomanip>
+
+class MemoryManager {
+private:
+    struct AllocationRecord {
+        uintptr_t address;
+        size_t size;
+        std::string description;
+    };
+    
+    std::vector<AllocationRecord> allocations;
+
+public:
+    void recordAllocation(void* ptr, size_t size, const std::string& desc) {
+        uintptr_t addr = reinterpret_cast<uintptr_t>(ptr);
+        allocations.push_back({addr, size, desc});
+    }
+    
+    void printAllocations() const {
+        std::cout << "Memory Allocations:" << std::endl;
+        std::cout << std::setfill('0');
+        for (const auto& record : allocations) {
+            std::cout << "0x" << std::hex << std::setw(16) << record.address 
+                      << std::dec << " - Size: " << record.size 
+                      << " bytes - " << record.description << std::endl;
+        }
+    }
+    
+    bool isValidAddress(void* ptr) const {
+        uintptr_t addr = reinterpret_cast<uintptr_t>(ptr);
+        for (const auto& record : allocations) {
+            if (addr >= record.address && addr < record.address + record.size) {
+                return true;
+            }
+        }
+        return false;
+    }
+};
+
+// Pointer arithmetic using uintptr_t
+void demonstratePointerArithmetic() {
+    int array[5] = {10, 20, 30, 40, 50};
+    
+    // Get base address as uintptr_t
+    uintptr_t baseAddr = reinterpret_cast<uintptr_t>(array);
+    
+    std::cout << "Array element addresses and values:" << std::endl;
+    for (int i = 0; i < 5; ++i) {
+        uintptr_t elemAddr = baseAddr + i * sizeof(int);
+        int* elemPtr = reinterpret_cast<int*>(elemAddr);
+        
+        std::cout << "Element " << i << ": Address = 0x" << std::hex << elemAddr 
+                  << std::dec << ", Value = " << *elemPtr << std::endl;
+    }
+}
+
+int main() {
+    MemoryManager memMgr;
+    
+    // Allocate some memory and record it
+    int* intPtr = new int(42);
+    double* doublePtr = new double(3.14);
+    char* charArray = new char[100];
+    
+    memMgr.recordAllocation(intPtr, sizeof(int), "Integer variable");
+    memMgr.recordAllocation(doublePtr, sizeof(double), "Double variable");
+    memMgr.recordAllocation(charArray, 100, "Character array");
+    
+    // Print allocation records
+    memMgr.printAllocations();
+    
+    // Test address validation
+    std::cout << "\nAddress validation tests:" << std::endl;
+    std::cout << "intPtr valid: " << (memMgr.isValidAddress(intPtr) ? "Yes" : "No") << std::endl;
+    std::cout << "doublePtr valid: " << (memMgr.isValidAddress(doublePtr) ? "Yes" : "No") << std::endl;
+    
+    int stackVar = 100;
+    std::cout << "stackVar valid: " << (memMgr.isValidAddress(&stackVar) ? "Yes" : "No") << std::endl;
+    
+    // Demonstrate pointer arithmetic
+    std::cout << "\nPointer arithmetic demonstration:" << std::endl;
+    demonstratePointerArithmetic();
+    
+    // Cleanup
+    delete intPtr;
+    delete doublePtr;
+    delete[] charArray;
+    
+    return 0;
+}
+```
+
+### Common uintptr_t Use Cases:
+
+1. **Pointer-to-Integer Conversions**: Converting pointers for logging, serialization, or low-level manipulation
+2. **System-Level Programming**: Operating systems, embedded systems, direct memory manipulation
+3. **Interfacing with Hardware**: Memory-mapped I/O, hardware registers
+4. **Hash Functions**: Using pointer addresses as hash keys
+5. **Alignment Calculations**: Ensuring proper memory alignment
+
+## Virtual Destructors
+
+A **virtual destructor** ensures that the correct destructor is called for an object when it is deleted through a base class pointer. This is critical for proper resource management in inheritance hierarchies.
+
+### Why Virtual Destructors Are Important
+
+When deleting an object of a derived class through a base class pointer, if the base class destructor is **not virtual**, only the base class destructor will be invoked. This can lead to **resource leaks** because the derived class destructor won't execute.
+
+### Problem Without Virtual Destructors:
+
+```cpp
+#include <iostream>
+
+class Base {
+public:
+    Base() { std::cout << "Base constructor" << std::endl; }
+    ~Base() { std::cout << "Base destructor" << std::endl; }  // Non-virtual!
+};
+
+class Derived : public Base {
+private:
+    int* data;
+
+public:
+    Derived() : data(new int[1000]) { 
+        std::cout << "Derived constructor (allocated memory)" << std::endl; 
+    }
+    
+    ~Derived() { 
+        delete[] data;
+        std::cout << "Derived destructor (freed memory)" << std::endl; 
+    }
+};
+
+int main() {
+    std::cout << "=== Problem: Non-virtual destructor ===" << std::endl;
+    
+    Base* ptr = new Derived();  // Derived object created
+    delete ptr;                 // Only Base destructor called! MEMORY LEAK!
+    
+    std::cout << "\nDerived destructor was NOT called - memory leaked!" << std::endl;
+    
+    return 0;
+}
+```
+
+### Solution With Virtual Destructors:
+
+```cpp
+#include <iostream>
+#include <memory>
+
+class Base {
+public:
+    Base() { std::cout << "Base constructor" << std::endl; }
+    virtual ~Base() { std::cout << "Base destructor" << std::endl; }  // Virtual!
+};
+
+class Derived : public Base {
+private:
+    int* data;
+
+public:
+    Derived() : data(new int[1000]) { 
+        std::cout << "Derived constructor (allocated memory)" << std::endl; 
+    }
+    
+    ~Derived() override { 
+        delete[] data;
+        std::cout << "Derived destructor (freed memory)" << std::endl; 
+    }
+};
+
+class MoreDerived : public Derived {
+private:
+    double* moreData;
+
+public:
+    MoreDerived() : moreData(new double[500]) {
+        std::cout << "MoreDerived constructor (allocated more memory)" << std::endl;
+    }
+    
+    ~MoreDerived() override {
+        delete[] moreData;
+        std::cout << "MoreDerived destructor (freed more memory)" << std::endl;
+    }
+};
+
+int main() {
+    std::cout << "=== Solution: Virtual destructor ===" << std::endl;
+    
+    Base* ptr1 = new Derived();
+    Base* ptr2 = new MoreDerived();
+    
+    std::cout << "\nDeleting Derived through Base pointer:" << std::endl;
+    delete ptr1;  // Correct destructors called: Derived -> Base
+    
+    std::cout << "\nDeleting MoreDerived through Base pointer:" << std::endl;
+    delete ptr2;  // Correct destructors called: MoreDerived -> Derived -> Base
+    
+    std::cout << "\n=== Using smart pointers (recommended) ===" << std::endl;
+    {
+        std::unique_ptr<Base> smartPtr1 = std::make_unique<Derived>();
+        std::unique_ptr<Base> smartPtr2 = std::make_unique<MoreDerived>();
+        
+        // Destructors automatically called when smart pointers go out of scope
+        std::cout << "Smart pointers going out of scope..." << std::endl;
+    }
+    std::cout << "All resources properly cleaned up!" << std::endl;
+    
+    return 0;
+}
+```
+
+## Best Practices for Casting in C++
+
+1. **Prefer safer casts (`static_cast`, `dynamic_cast`)**: Use these over C-style casts whenever possible.
+2. **Avoid unnecessary casting**: Redundant or unsafe casting can lead to undefined behavior and difficult-to-debug errors.
+3. **Be cautious with `reinterpret_cast` and `const_cast`**: Use them only when you fully understand the implications.
+4. **Use polymorphism and virtual functions**: When dealing with dynamic types, prefer designs that minimize the need for casting.
+
+*Casting in C++ provides powerful tools for type conversion, but with great power comes great responsibility. Always prioritize code safety and readability when employing casting mechanisms.*
