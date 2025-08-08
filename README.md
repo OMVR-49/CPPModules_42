@@ -1246,3 +1246,584 @@ int main() {
 
 *This document covers all essential concepts in CPP Module 02, providing you with a comprehensive understanding of ad-hoc polymorphism, operator overloading, orthodox canonical form, and floating point representation in C++.*
 
+# CPP Module 03
+
+**Topics Covered:** Inheritance
+
+## Summary
+
+This module covers one of the most important features of Object-Oriented Programming - **Inheritance**. It includes:
+
+- **Introduction to Inheritance:** A key OOP feature allowing a class to derive properties and characteristics from another class
+- **Inheritance Modes:** Public, Protected, and Private inheritance with their access control implications
+- **Types of Inheritance:**
+  - Single inheritance: a class inherits from one parent class
+  - Multiple inheritance: a class inherits from more than one parent class  
+  - Multilevel inheritance: a class inherits from a child class
+  - Hierarchical inheritance: multiple classes inherit from a single parent class
+
+## What is Inheritance?
+
+Inheritance is one of the most important features of Object-Oriented Programming (OOP). It's the capability of a class to derive properties and characteristics from another class. This allows for code reusability, establishing a relationship between parent and child classes, and creating a hierarchical classification.
+
+## Basic Syntax
+
+```cpp
+class Child_class_name : access_specifier Parent_class_name {
+    // body
+};
+```
+
+**Components:**
+- **Child_class_name:** The class that will inherit from the Parent class (also called derived class or subclass)
+- **access_specifier:** Can be one of three types (public, private, protected). If none is specified, it defaults to private
+- **Parent_class_name:** The class being inherited from (also called base class or superclass)
+
+## Parent Class vs Child Class
+
+- **Parent class (Base class/Superclass):** An existing class from which other classes inherit properties and methods
+- **Child class (Derived class/Subclass):** A new class created by inheriting from the base class
+
+### Basic Example
+
+```cpp
+#include <iostream>
+
+// Parent class (Base class)
+class Animal {
+public:
+    std::string name;
+    int age;
+    
+    void eat() {
+        std::cout << name << " is eating." << std::endl;
+    }
+    
+    void sleep() {
+        std::cout << name << " is sleeping." << std::endl;
+    }
+};
+
+// Child class (Derived class)
+class Dog : public Animal {
+public:
+    std::string breed;
+    
+    void bark() {
+        std::cout << name << " is barking!" << std::endl;
+    }
+    
+    void wagTail() {
+        std::cout << name << " is wagging tail!" << std::endl;
+    }
+};
+
+int main() {
+    Dog myDog;
+    myDog.name = "Buddy";
+    myDog.age = 3;
+    myDog.breed = "Golden Retriever";
+    
+    // Using inherited methods
+    myDog.eat();    // From Animal class
+    myDog.sleep();  // From Animal class
+    
+    // Using own methods
+    myDog.bark();   // From Dog class
+    myDog.wagTail(); // From Dog class
+    
+    return 0;
+}
+```
+
+## Inheritance Modes
+
+There are three modes of inheritance that control how the access specifiers of the parent class members are modified in the derived class:
+
+| Parent Class Access | Public Inheritance | Protected Inheritance | Private Inheritance |
+|---------------------|-------------------|----------------------|-------------------|
+| Public              | Public            | Protected            | Private           |
+| Protected           | Protected         | Protected            | Private           |
+| Private             | Not Accessible    | Not Accessible       | Not Accessible    |
+
+### Public Inheritance
+
+If we derive from a class called **Parent** publicly to a class called **Child**, then every access specifier from the **Parent** class stays the same in the **Child** class.
+
+```cpp
+class Parent {
+public:
+    int publicVar;
+protected:
+    int protectedVar;
+private:
+    int privateVar;
+};
+
+class Child : public Parent {
+    // publicVar remains public
+    // protectedVar remains protected  
+    // privateVar is not accessible
+public:
+    void testAccess() {
+        publicVar = 10;      // OK - public in Parent, public in Child
+        protectedVar = 20;   // OK - protected in Parent, protected in Child
+        // privateVar = 30;  // ERROR - private members are not accessible
+    }
+};
+```
+
+### Protected Inheritance
+
+If we derive from a class called **Parent** in a protected way to a class called **Child**, then the public members of the **Parent** class become protected, and other accessible members stay the same in the **Child** class.
+
+```cpp
+class Child : protected Parent {
+    // publicVar becomes protected
+    // protectedVar remains protected
+    // privateVar is not accessible
+public:
+    void testAccess() {
+        publicVar = 10;      // OK - but now protected in Child
+        protectedVar = 20;   // OK - still protected
+        // privateVar = 30;  // ERROR - private members are not accessible
+    }
+};
+```
+
+### Private Inheritance
+
+If we derive from a class called **Parent** privately to a class called **Child**, then the public and protected members of the **Parent** class become private in the **Child** class.
+
+```cpp
+class Child : private Parent {
+    // publicVar becomes private
+    // protectedVar becomes private
+    // privateVar is not accessible
+public:
+    void testAccess() {
+        publicVar = 10;      // OK - but now private in Child
+        protectedVar = 20;   // OK - but now private in Child
+        // privateVar = 30;  // ERROR - private members are not accessible
+    }
+};
+```
+
+## Complete Example of Different Inheritance Modes
+
+```cpp
+#include <iostream>
+
+class Parent {
+public:
+    int x;
+    void publicMethod() {
+        std::cout << "Public method from Parent" << std::endl;
+    }
+
+protected:
+    int y;
+    void protectedMethod() {
+        std::cout << "Protected method from Parent" << std::endl;
+    }
+
+private:
+    int z;
+    void privateMethod() {
+        std::cout << "Private method from Parent" << std::endl;
+    }
+};
+
+class ChildA : public Parent {
+public:
+    void testAccess() {
+        x = 10;              // OK - x is public
+        publicMethod();      // OK - publicMethod is public
+        y = 20;              // OK - y is protected
+        protectedMethod();   // OK - protectedMethod is protected
+        // z = 30;           // ERROR - z is not accessible
+        // privateMethod();  // ERROR - privateMethod is not accessible
+    }
+};
+
+class ChildB : protected Parent {
+public:
+    void testAccess() {
+        x = 10;              // OK - x is now protected
+        publicMethod();      // OK - publicMethod is now protected
+        y = 20;              // OK - y remains protected
+        protectedMethod();   // OK - protectedMethod remains protected
+        // z = 30;           // ERROR - z is not accessible
+        // privateMethod();  // ERROR - privateMethod is not accessible
+    }
+};
+
+class ChildC : private Parent {
+public:
+    void testAccess() {
+        x = 10;              // OK - x is now private
+        publicMethod();      // OK - publicMethod is now private
+        y = 20;              // OK - y is now private
+        protectedMethod();   // OK - protectedMethod is now private
+        // z = 30;           // ERROR - z is not accessible
+        // privateMethod();  // ERROR - privateMethod is not accessible
+    }
+};
+
+int main() {
+    ChildA objA;
+    objA.x = 100;        // OK - x is public in ChildA
+    objA.publicMethod(); // OK - publicMethod is public in ChildA
+    
+    ChildB objB;
+    // objB.x = 200;     // ERROR - x is protected in ChildB
+    // objB.publicMethod(); // ERROR - publicMethod is protected in ChildB
+    
+    ChildC objC;
+    // objC.x = 300;     // ERROR - x is private in ChildC
+    // objC.publicMethod(); // ERROR - publicMethod is private in ChildC
+    
+    return 0;
+}
+```
+
+## Accessing Private Members of Parent Class
+
+**Important Notes:**
+- A derived class doesn't inherit **access** to private data members. However, it does inherit a full parent object, which contains any private members that class declares.
+- A **protected** member is accessible within the class and its derived classes, but not from outside the class.
+
+To access private members of the parent class from the child class, you need to use **Encapsulation** principles with **Setter and Getter** methods. These should be public in the **Parent** class so you can use them in the **Child** class.
+
+```cpp
+#include <iostream>
+
+class Parent {
+private:
+    int privateData;
+
+public:
+    // Constructor
+    Parent(int data = 0) : privateData(data) {}
+    
+    // Getter method (public)
+    int getPrivateData() const {
+        return privateData;
+    }
+    
+    // Setter method (public)
+    void setPrivateData(int data) {
+        privateData = data;
+    }
+    
+protected:
+    int protectedData;
+};
+
+class Child : public Parent {
+public:
+    Child(int data = 0) : Parent(data) {}
+    
+    void accessParentData() {
+        // Can't access privateData directly
+        // privateData = 100; // ERROR
+        
+        // But can access through public methods
+        setPrivateData(100);
+        std::cout << "Private data: " << getPrivateData() << std::endl;
+        
+        // Can access protected data directly
+        protectedData = 200;
+        std::cout << "Protected data: " << protectedData << std::endl;
+    }
+};
+
+int main() {
+    Child child;
+    child.accessParentData();
+    return 0;
+}
+```
+
+## Types of Inheritance
+
+### 1. Single Inheritance
+
+Single inheritance is when a class inherits from only one parent class. This is the most common and straightforward form of inheritance.
+
+```cpp
+#include <iostream>
+
+class Vehicle {
+protected:
+    std::string brand;
+    int year;
+
+public:
+    Vehicle(std::string b, int y) : brand(b), year(y) {}
+    
+    void displayInfo() {
+        std::cout << "Brand: " << brand << ", Year: " << year << std::endl;
+    }
+};
+
+class Car : public Vehicle {
+private:
+    int doors;
+
+public:
+    Car(std::string b, int y, int d) : Vehicle(b, y), doors(d) {}
+    
+    void displayCarInfo() {
+        displayInfo(); // Call parent method
+        std::cout << "Doors: " << doors << std::endl;
+    }
+};
+
+int main() {
+    Car myCar("Toyota", 2022, 4);
+    myCar.displayCarInfo();
+    return 0;
+}
+```
+
+### 2. Multiple Inheritance
+
+Multiple inheritance is when a class can inherit from more than one parent class.
+
+**Syntax:**
+```cpp
+class subclass_name : access_mode parent_class1, access_mode parent_class2, access_mode parent_class3 {
+    // body of subclass
+};
+```
+
+**Example:**
+```cpp
+#include <iostream>
+
+class Engine {
+protected:
+    int horsepower;
+
+public:
+    Engine(int hp) : horsepower(hp) {}
+    
+    void startEngine() {
+        std::cout << "Engine started with " << horsepower << " HP" << std::endl;
+    }
+};
+
+class GPS {
+protected:
+    std::string location;
+
+public:
+    GPS(std::string loc) : location(loc) {}
+    
+    void navigate() {
+        std::cout << "Navigating to: " << location << std::endl;
+    }
+};
+
+// Multiple inheritance
+class SmartCar : public Engine, public GPS {
+private:
+    std::string model;
+
+public:
+    SmartCar(std::string m, int hp, std::string loc) 
+        : model(m), Engine(hp), GPS(loc) {}
+    
+    void displayInfo() {
+        std::cout << "Smart Car Model: " << model << std::endl;
+        startEngine(); // From Engine class
+        navigate();    // From GPS class
+    }
+};
+
+int main() {
+    SmartCar car("Tesla Model S", 670, "San Francisco");
+    car.displayInfo();
+    return 0;
+}
+```
+
+### 3. Multilevel Inheritance
+
+Multilevel inheritance is when a class inherits from a child class, creating a chain of inheritance.
+
+**Syntax:**
+```cpp
+class C {
+    // base class
+};
+
+class B : public C {
+    // B inherits from C
+};
+
+class A : public B {
+    // A inherits from B (which inherits from C)
+};
+```
+
+**Example:**
+```cpp
+#include <iostream>
+
+class Animal {
+protected:
+    std::string species;
+
+public:
+    Animal(std::string s) : species(s) {}
+    
+    void breathe() {
+        std::cout << species << " is breathing" << std::endl;
+    }
+};
+
+class Mammal : public Animal {
+protected:
+    bool warmBlooded;
+
+public:
+    Mammal(std::string s, bool wb) : Animal(s), warmBlooded(wb) {}
+    
+    void feedMilk() {
+        std::cout << species << " is feeding milk to babies" << std::endl;
+    }
+};
+
+class Dog : public Mammal {
+private:
+    std::string breed;
+
+public:
+    Dog(std::string s, std::string b) : Mammal(s, true), breed(b) {}
+    
+    void bark() {
+        std::cout << breed << " " << species << " is barking" << std::endl;
+    }
+    
+    void displayInfo() {
+        breathe();   // From Animal class
+        feedMilk();  // From Mammal class
+        bark();      // From Dog class
+    }
+};
+
+int main() {
+    Dog myDog("Canine", "Golden Retriever");
+    myDog.displayInfo();
+    return 0;
+}
+```
+
+### 4. Hierarchical Inheritance
+
+Hierarchical inheritance is when multiple classes inherit from a single parent class.
+
+**Syntax:**
+```cpp
+class A {
+    // base class
+};
+
+class B : public A {
+    // B inherits from A
+};
+
+class C : public A {
+    // C inherits from A
+};
+
+class D : public A {
+    // D inherits from A
+};
+```
+
+**Example:**
+```cpp
+#include <iostream>
+
+class Shape {
+protected:
+    std::string color;
+
+public:
+    Shape(std::string c) : color(c) {}
+    
+    void displayColor() {
+        std::cout << "Color: " << color << std::endl;
+    }
+};
+
+class Circle : public Shape {
+private:
+    double radius;
+
+public:
+    Circle(std::string c, double r) : Shape(c), radius(r) {}
+    
+    void displayArea() {
+        std::cout << "Circle area: " << 3.14159 * radius * radius << std::endl;
+    }
+};
+
+class Rectangle : public Shape {
+private:
+    double length, width;
+
+public:
+    Rectangle(std::string c, double l, double w) : Shape(c), length(l), width(w) {}
+    
+    void displayArea() {
+        std::cout << "Rectangle area: " << length * width << std::endl;
+    }
+};
+
+class Triangle : public Shape {
+private:
+    double base, height;
+
+public:
+    Triangle(std::string c, double b, double h) : Shape(c), base(b), height(h) {}
+    
+    void displayArea() {
+        std::cout << "Triangle area: " << 0.5 * base * height << std::endl;
+    }
+};
+
+int main() {
+    Circle circle("Red", 5.0);
+    Rectangle rectangle("Blue", 4.0, 6.0);
+    Triangle triangle("Green", 3.0, 4.0);
+    
+    circle.displayColor();    // From Shape class
+    circle.displayArea();     // From Circle class
+    
+    rectangle.displayColor(); // From Shape class
+    rectangle.displayArea();  // From Rectangle class
+    
+    triangle.displayColor();  // From Shape class
+    triangle.displayArea();   // From Triangle class
+    
+    return 0;
+}
+```
+
+## Key Points to Remember
+
+1. **Private members** of the parent class are never directly accessible in derived classes, regardless of the inheritance type
+2. **Protected members** are accessible in derived classes but not from outside the class
+3. **Public inheritance** maintains the access levels of the parent class
+4. **Protected inheritance** makes public members of the parent class protected in the derived class
+5. **Private inheritance** makes both public and protected members of the parent class private in the derived class
+6. Use **getter and setter methods** to access private members of the parent class
+7. Inheritance promotes **code reusability** and establishes **is-a relationships**
+
+---
+
+*This document provides a comprehensive guide to inheritance in C++, covering all types and modes with practical examples that demonstrate the concepts in action.*
