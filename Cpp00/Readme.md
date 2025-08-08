@@ -2,7 +2,7 @@
 
 **Topics Covered:** Namespaces, Classes, member functions, stdio streams, initialization lists, static, const, and other basic C++ concepts
 
-> *"I can swear god that this is the easiest doc u'll need to read"* - Base64 decoded message
+> *"aSBjYW4gc3dlYXIgZ29kIHRoYXQgdGhpcyBpcyB0aGUgZWFzaWVzdCBkb2MgdSBsbCBuZWVkIHRvIHJlYWQ="* - Base64
 
 ## Summary
 
