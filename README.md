@@ -1827,3 +1827,1070 @@ int main() {
 ---
 
 *This document provides a comprehensive guide to inheritance in C++, covering all types and modes with practical examples that demonstrate the concepts in action.*
+
+# CPP Module 04
+
+**Topics Covered:** Virtual functions, override, deep & shallow copy, subtype polymorphism, abstract classes, interfaces
+
+> *"Subtype polymorphism is key to understand maximum flexibility in object-oriented programming"* - Base64 decoded message
+
+## Overview
+
+In this module, we explore how polymorphism allows objects of different classes to be treated as objects of a common superclass, particularly through subtype polymorphism. We'll also cover deep & shallow copy, virtual functions, override, abstract classes, interfaces, and copying mechanisms relevant to inheritance and dynamic memory management.
+
+## Deep vs Shallow Copy
+
+When copying objects, C++ differentiates between **shallow** and **deep copies**:
+
+- **Shallow copy:** Copies the memory address of an object, meaning both the original and the copy share the same data
+- **Deep copy:** Creates a full, independent copy of an object and its associated resources, avoiding shared ownership of data
+
+This distinction is crucial in classes using polymorphism, especially when handling pointers or dynamically allocated memory. For normal data types like `int` (not `int*`), there is no problem or difference - shallow copy will work normally without affecting your data.
+
+### Shallow Copy Example
+
+```cpp
+#include <iostream>
+
+class Base {
+public:
+    int* data;
+    int a;
+    
+    // Constructor
+    Base(int value) : a(value) {
+        data = new int(value * 2);
+    }
+    
+    // Problematic shallow copy constructor
+    Base(const Base& other) : data(other.data), a(other.a) {
+        // Only copies the pointer address, not the actual data
+        std::cout << "Shallow copy constructor called" << std::endl;
+    }
+    
+    // Destructor
+    ~Base() {
+        delete data;
+        std::cout << "Destructor called" << std::endl;
+    }
+    
+    void displayData() {
+        std::cout << "a: " << a << ", *data: " << *data << std::endl;
+    }
+};
+```
+
+#### Problem Case with Shallow Copy:
+
+```cpp
+int main() {
+    // Problem case with pointers
+    {
+        Base obj1(5);
+        obj1.displayData(); // a: 5, *data: 10
+        
+        Base obj2 = obj1;  // Shallow copy - both share same data pointer
+        obj2.displayData(); // a: 5, *data: 10
+        
+        *obj2.data = 100;  // Changing obj2's data
+        
+        std::cout << "After modifying obj2.data:" << std::endl;
+        obj1.displayData(); // a: 5, *data: 100 (PROBLEM: obj1 affected!)
+        obj2.displayData(); // a: 5, *data: 100
+        
+        // Both objects will try to delete the same memory location
+        // This leads to undefined behavior (double deletion)
+    }
+    
+    return 0;
+}
+```
+
+**Issues with shallow copy:**
+- Both `obj1` and `obj2` share the same `data` pointer
+- Modifying `obj2.data` affects `obj1.data` because both point to the same location
+- When objects are destroyed, both try to delete the same memory (undefined behavior)
+- If the original object is deleted, the pointer becomes invalid in both objects (dangling pointer)
+
+#### No Problem Case with Primitive Types:
+
+```cpp
+class SimpleBase {
+public:
+    int a;
+    
+    SimpleBase(int value) : a(value) {}
+    
+    // Shallow copy works fine for primitive types
+    SimpleBase(const SimpleBase& other) : a(other.a) {}
+};
+
+int main() {
+    SimpleBase obj1(5);
+    SimpleBase obj2 = obj1;  // Shallow copy
+    
+    obj2.a = 10;  // Change obj2's a
+    
+    std::cout << "obj1.a: " << obj1.a << std::endl;  // Outputs: 5
+    std::cout << "obj2.a: " << obj2.a << std::endl;  // Outputs: 10
+    
+    // No problem - each object has its own copy of primitive data
+    return 0;
+}
+```
+
+### Deep Copy Example
+
+Because of the problems with shallow copy when dealing with pointers, deep copy provides a solution by creating independent copies of the data.
+
+```cpp
+#include <iostream>
+
+class Base {
+public:
+    int* data;
+    int a;
+    
+    // Constructor
+    Base(int value) : a(value) {
+        data = new int(value * 2);
+        std::cout << "Constructor called" << std::endl;
+    }
+    
+    // Deep copy constructor
+    Base(const Base& other) : a(other.a) {
+        data = new int(*other.data);  // Allocate new memory and copy the value
+        std::cout << "Deep copy constructor called" << std::endl;
+    }
+    
+    // Copy assignment operator (deep copy)
+    Base& operator=(const Base& other) {
+        if (this != &other) {
+            delete data;  // Clean up existing data
+            a = other.a;
+            data = new int(*other.data);  // Deep copy
+        }
+        return *this;
+    }
+    
+    // Clone method for polymorphic copying
+    virtual Base* clone() const {
+        return new Base(*this);
+    }
+    
+    // Destructor
+    ~Base() {
+        delete data;
+        std::cout << "Destructor called" << std::endl;
+    }
+    
+    void displayData() {
+        std::cout << "a: " << a << ", *data: " << *data 
+                  << ", data address: " << data << std::endl;
+    }
+};
+
+int main() {
+    Base obj1(5);
+    obj1.displayData(); // Shows original data and address
+    
+    Base obj2 = obj1;   // Deep copy constructor called
+    obj2.displayData(); // Shows copied data with different address
+    
+    *obj2.data = 100;   // Modify obj2's data
+    
+    std::cout << "After modifying obj2.data:" << std::endl;
+    obj1.displayData(); // obj1 is unaffected
+    obj2.displayData(); // obj2 shows modified data
+    
+    return 0;
+}
+```
+
+**Advantages of deep copy:**
+- Each object has its own independent copy of the data
+- Changes to one object don't affect the other
+- No dangling pointer issues
+- Safe destruction of objects
+
+## Virtual Functions and Override
+
+In C++, a **virtual function** allows derived classes to provide a specific implementation of a function defined in the base class. Virtual functions enable **runtime polymorphism**, where the actual function being called is determined by the object's runtime type rather than its compile-time type.
+
+The `override` keyword ensures that a function in a derived class is actually overriding a base class's virtual function. If no matching function exists in the base class, the compiler generates an error.
+
+### Runtime Polymorphism Example
+
+Runtime polymorphism occurs when you use the `virtual` keyword in a parent class member function and override it in the child class.
+
+#### Without Virtual Functions (Problem):
+
+```cpp
+#include <iostream>
+
+class Shape {
+public:
+    void draw() {  // Non-virtual function
+        std::cout << "Base Shape draw()" << std::endl;
+    }
+};
+
+class Circle : public Shape {
+public:
+    void draw() {  // This hides the base class function
+        std::cout << "Drawing a Circle" << std::endl;
+    }
+};
+
+int main() {
+    Shape* shape = new Circle();
+    shape->draw();  // Calls Shape::draw(), not Circle::draw()!
+    
+    delete shape;
+    return 0;
+}
+// Output: Base Shape draw() (WRONG!)
+```
+
+#### With Virtual Functions (Solution):
+
+```cpp
+#include <iostream>
+
+class Shape {
+public:
+    virtual void draw() {  // Virtual function enables runtime polymorphism
+        std::cout << "Base Shape draw()" << std::endl;
+    }
+    
+    // Virtual destructor is important for proper cleanup
+    virtual ~Shape() {
+        std::cout << "Shape destructor" << std::endl;
+    }
+};
+
+class Circle : public Shape {
+public:
+    void draw() override {  // Overrides the base class function
+        std::cout << "Drawing a Circle" << std::endl;
+    }
+    
+    ~Circle() override {
+        std::cout << "Circle destructor" << std::endl;
+    }
+};
+
+class Rectangle : public Shape {
+public:
+    void draw() override {
+        std::cout << "Drawing a Rectangle" << std::endl;
+    }
+    
+    ~Rectangle() override {
+        std::cout << "Rectangle destructor" << std::endl;
+    }
+};
+
+int main() {
+    Shape* shapes[] = {
+        new Circle(),
+        new Rectangle(),
+        new Circle()
+    };
+    
+    // Runtime polymorphism in action
+    for (int i = 0; i < 3; i++) {
+        shapes[i]->draw();  // Calls the correct derived class method
+        delete shapes[i];   // Calls the correct destructor
+    }
+    
+    return 0;
+}
+// Output:
+// Drawing a Circle
+// Drawing a Rectangle  
+// Drawing a Circle
+```
+
+### Comprehensive Polymorphism Example
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <memory>
+
+class Animal {
+public:
+    virtual void makeSound() {
+        std::cout << "Some generic animal sound" << std::endl;
+    }
+    
+    virtual void move() {
+        std::cout << "Animal moves" << std::endl;
+    }
+    
+    // Pure virtual function makes this an abstract class
+    virtual std::string getType() const = 0;
+    
+    virtual ~Animal() {
+        std::cout << "Animal destructor" << std::endl;
+    }
+};
+
+class Dog : public Animal {
+public:
+    void makeSound() override {
+        std::cout << "Woof! Woof!" << std::endl;
+    }
+    
+    void move() override {
+        std::cout << "Dog runs on four legs" << std::endl;
+    }
+    
+    std::string getType() const override {
+        return "Dog";
+    }
+    
+    ~Dog() override {
+        std::cout << "Dog destructor" << std::endl;
+    }
+};
+
+class Cat : public Animal {
+public:
+    void makeSound() override {
+        std::cout << "Meow! Meow!" << std::endl;
+    }
+    
+    void move() override {
+        std::cout << "Cat walks silently" << std::endl;
+    }
+    
+    std::string getType() const override {
+        return "Cat";
+    }
+    
+    ~Cat() override {
+        std::cout << "Cat destructor" << std::endl;
+    }
+};
+
+void demonstratePolymorphism(Animal* animal) {
+    std::cout << "Animal type: " << animal->getType() << std::endl;
+    animal->makeSound();
+    animal->move();
+    std::cout << "---" << std::endl;
+}
+
+int main() {
+    // Using smart pointers for automatic memory management
+    std::vector<std::unique_ptr<Animal>> animals;
+    
+    animals.push_back(std::make_unique<Dog>());
+    animals.push_back(std::make_unique<Cat>());
+    animals.push_back(std::make_unique<Dog>());
+    
+    for (auto& animal : animals) {
+        demonstratePolymorphism(animal.get());
+    }
+    
+    return 0;
+}
+```
+
+## VTable (Virtual Table)
+
+A **vtable (virtual table)** is a mechanism used in C++ to support **runtime polymorphism** for classes with **virtual functions**. It is essentially a table of function pointers, one for each virtual function in a class.
+
+### How VTable Works:
+
+1. **VTable Creation:** Each class with virtual functions gets its own vtable containing pointers to the virtual function implementations
+2. **VPtr (Virtual Pointer):** Each object of a class with virtual functions contains a hidden pointer (vptr) that points to the class's vtable
+3. **Dynamic Dispatch:** When a virtual function is called, the program uses the vptr to find the correct function in the vtable
+
+### VTable Example Visualization:
+
+```cpp
+#include <iostream>
+
+class Base {
+public:
+    virtual void func1() { std::cout << "Base::func1()" << std::endl; }
+    virtual void func2() { std::cout << "Base::func2()" << std::endl; }
+    virtual ~Base() {}
+};
+
+class Derived : public Base {
+public:
+    void func1() override { std::cout << "Derived::func1()" << std::endl; }
+    void func2() override { std::cout << "Derived::func2()" << std::endl; }
+    virtual void func3() { std::cout << "Derived::func3()" << std::endl; }
+};
+
+/*
+VTable for Base:
++-------------------+
+| &Base::func1      |
+| &Base::func2      |
+| &Base::~Base      |
++-------------------+
+
+VTable for Derived:
++-------------------+
+| &Derived::func1   |  // Overridden
+| &Derived::func2   |  // Overridden
+| &Derived::~Derived|  // Overridden
+| &Derived::func3   |  // New virtual function
++-------------------+
+*/
+
+int main() {
+    Base* ptr = new Derived();
+    
+    // These calls use the vtable to find the correct function
+    ptr->func1();  // Calls Derived::func1() via vtable lookup
+    ptr->func2();  // Calls Derived::func2() via vtable lookup
+    
+    delete ptr;    // Calls Derived::~Derived() via vtable lookup
+    
+    return 0;
+}
+```
+
+## Abstract Classes
+
+An **abstract class** cannot create objects directly and must contain at least one **pure virtual function** (`= 0`). Derived classes must implement all pure virtual functions to become concrete classes. This enforces specific behavior across derived classes.
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <memory>
+
+// Abstract base class
+class Drawable {
+public:
+    // Pure virtual functions make this class abstract
+    virtual void draw() const = 0;
+    virtual double getArea() const = 0;
+    virtual std::string getName() const = 0;
+    
+    // Virtual destructor
+    virtual ~Drawable() = default;
+    
+    // Concrete method that can be inherited
+    void displayInfo() const {
+        std::cout << "Shape: " << getName() 
+                  << ", Area: " << getArea() << std::endl;
+        draw();
+    }
+};
+
+// Concrete derived class
+class Circle : public Drawable {
+private:
+    double radius;
+
+public:
+    Circle(double r) : radius(r) {}
+    
+    void draw() const override {
+        std::cout << "Drawing a circle with radius " << radius << std::endl;
+    }
+    
+    double getArea() const override {
+        return 3.14159 * radius * radius;
+    }
+    
+    std::string getName() const override {
+        return "Circle";
+    }
+};
+
+class Rectangle : public Drawable {
+private:
+    double width, height;
+
+public:
+    Rectangle(double w, double h) : width(w), height(h) {}
+    
+    void draw() const override {
+        std::cout << "Drawing a rectangle " << width << "x" << height << std::endl;
+    }
+    
+    double getArea() const override {
+        return width * height;
+    }
+    
+    std::string getName() const override {
+        return "Rectangle";
+    }
+};
+
+int main() {
+    // Cannot instantiate abstract class
+    // Drawable d;  // ERROR: Cannot instantiate abstract class
+    
+    std::vector<std::unique_ptr<Drawable>> shapes;
+    
+    shapes.push_back(std::make_unique<Circle>(5.0));
+    shapes.push_back(std::make_unique<Rectangle>(4.0, 6.0));
+    shapes.push_back(std::make_unique<Circle>(3.0));
+    
+    for (const auto& shape : shapes) {
+        shape->displayInfo();
+        std::cout << "---" << std::endl;
+    }
+    
+    return 0;
+}
+```
+
+## Interfaces
+
+In C++, an **interface** is an abstract class where all methods are pure virtual. It defines a contract for the derived classes to follow without providing any implementation.
+
+```cpp
+#include <iostream>
+
+// Interface - all methods are pure virtual
+class Printable {
+public:
+    virtual void print() const = 0;
+    virtual ~Printable() = default;
+};
+
+class Serializable {
+public:
+    virtual std::string serialize() const = 0;
+    virtual void deserialize(const std::string& data) = 0;
+    virtual ~Serializable() = default;
+};
+
+// Multiple interface inheritance
+class Document : public Printable, public Serializable {
+private:
+    std::string content;
+    std::string title;
+
+public:
+    Document(const std::string& t, const std::string& c) 
+        : title(t), content(c) {}
+    
+    // Implement Printable interface
+    void print() const override {
+        std::cout << "Title: " << title << std::endl;
+        std::cout << "Content: " << content << std::endl;
+    }
+    
+    // Implement Serializable interface
+    std::string serialize() const override {
+        return title + "|" + content;
+    }
+    
+    void deserialize(const std::string& data) override {
+        size_t pos = data.find('|');
+        if (pos != std::string::npos) {
+            title = data.substr(0, pos);
+            content = data.substr(pos + 1);
+        }
+    }
+    
+    const std::string& getTitle() const { return title; }
+    const std::string& getContent() const { return content; }
+};
+
+// Another class implementing the same interfaces
+class Report : public Printable, public Serializable {
+private:
+    std::string reportType;
+    std::vector<std::string> data;
+
+public:
+    Report(const std::string& type) : reportType(type) {}
+    
+    void addData(const std::string& item) {
+        data.push_back(item);
+    }
+    
+    void print() const override {
+        std::cout << "Report Type: " << reportType << std::endl;
+        std::cout << "Data items:" << std::endl;
+        for (const auto& item : data) {
+            std::cout << "  - " << item << std::endl;
+        }
+    }
+    
+    std::string serialize() const override {
+        std::string result = reportType + ";";
+        for (const auto& item : data) {
+            result += item + ",";
+        }
+        return result;
+    }
+    
+    void deserialize(const std::string& serialized) override {
+        // Implementation for deserializing report data
+        std::cout << "Deserializing: " << serialized << std::endl;
+    }
+};
+
+// Function that works with any Printable object
+void printAny(const Printable& obj) {
+    obj.print();
+}
+
+// Function that works with any Serializable object
+void saveToFile(const Serializable& obj) {
+    std::string data = obj.serialize();
+    std::cout << "Saving to file: " << data << std::endl;
+}
+
+int main() {
+    Document doc("My Document", "This is the content of my document.");
+    Report report("Monthly Sales");
+    report.addData("Sales: $10000");
+    report.addData("Profit: $2000");
+    
+    // Using interface polymorphism
+    std::cout << "=== Printing objects ===" << std::endl;
+    printAny(doc);
+    std::cout << "---" << std::endl;
+    printAny(report);
+    
+    std::cout << "\n=== Serializing objects ===" << std::endl;
+    saveToFile(doc);
+    saveToFile(report);
+    
+    return 0;
+}
+```
+
+## Key Concepts Summary
+
+### Virtual Functions
+- Enable runtime polymorphism
+- Allow derived classes to override base class behavior
+- Function resolution happens at runtime based on object type
+
+### Override Keyword
+- Ensures function is actually overriding a virtual function
+- Provides compile-time safety
+- Makes code more readable and maintainable
+
+### Deep vs Shallow Copy
+- **Shallow:** Copies pointers/references (dangerous with dynamic memory)
+- **Deep:** Copies actual data (safe but potentially expensive)
+- Essential for classes with dynamic memory allocation
+
+### Abstract Classes
+- Cannot be instantiated directly
+- Must contain at least one pure virtual function
+- Used to define common interface for derived classes
+
+### Interfaces
+- Abstract classes with only pure virtual functions
+- Define contracts that implementing classes must follow
+- Enable multiple inheritance of behavior
+
+### VTable
+- Mechanism enabling runtime polymorphism
+- Table of function pointers for virtual functions
+- Each object has a vptr pointing to its class's vtable
+
+---
+
+*This module provides the foundation for advanced object-oriented programming in C++, enabling flexible and maintainable code through proper use of polymorphism and abstraction.*
+
+
+# CPP Module 05
+
+**Topics Covered:** Exception handling, try-catch blocks, synchronous & asynchronous exceptions, function pointers, insertion operator overloading
+
+> *"Exception handling transforms unpredictable runtime problems into controlled, manageable responses"*
+
+## Overview
+
+In this module, we explore C++ exception handling mechanisms that allow programs to respond gracefully to runtime errors and exceptional circumstances. We'll cover fundamental try-throw-catch blocks, exception types, function pointers, and operator overloading patterns that enhance robust program design.
+
+## What Are Exceptions
+
+**Exceptions** are responses to exceptional circumstances that arise while a program is running, such as dividing by zero. When problems occur during program execution, exceptions provide a structured way to handle these situations.
+
+### Key Benefits:
+- **Allow program continuation**: Programs can continue executing after handling the exception
+- **Controlled termination**: Programs can notify users of problems and terminate in a controlled manner  
+- **Robust programs**: Makes programs more robust and fault-tolerant
+
+### Basic Concept:
+
+```cpp
+// When an exceptional situation occurs, the program throws an exception
+if (someErrorCondition) {
+    throw SomeExceptionType("Error message");
+}
+
+// The exception is caught and handled in a catch block
+catch(SomeExceptionType e) {
+    // Handle the error appropriately
+}
+```
+
+## Exception Handling Fundamentals
+
+An **exception is a class** - specifically, the standard C++ base class for all exceptions. This class provides derived classes with a virtual function `what()` that returns the exception's stored error message.
+
+### The Exception Process:
+1. When an exceptional situation occurs, the program **throws** an object of the exception class
+2. The thrown exception is **caught** in a catch block
+3. The catch block handles the exception appropriately
+
+### Basic Syntax:
+
+```cpp
+try {
+    // Code that might throw an exception
+    throw SomeExceptionType("Error message");
+}
+catch(ExceptionType ExceptionName) {   
+    // catch block catches the exception that is thrown from try block
+}
+```
+
+## Types of C++ Exceptions
+
+Understanding the two main categories of exceptions helps in designing appropriate error handling strategies.
+
+### 1. Synchronous Exceptions
+
+**Synchronous exceptions** happen when something goes wrong because of a mistake in the input data or when the program is not equipped to handle the current type of data it's working with.
+
+**Examples:**
+- Dividing a number by zero
+- Array index out of bounds
+- Invalid input data
+- Logic errors in program flow
+
+```cpp
+#include <iostream>
+
+int main() {
+    try {
+        int i;
+        std::cin >> i; 
+        if (i > 18) {
+            std::cout << "Access granted" << std::endl;
+        }
+        else {
+            throw (i); // Throw the age value as an exception
+            // Note: Code after throw won't execute as control jumps to catch
+        }
+    }
+    catch(int e) { // Catch the thrown integer
+        std::cout << "Access denied" << std::endl;
+        std::cout << "Age is " << e << std::endl;
+    }
+    
+    return 0;
+}
+```
+
+### 2. Asynchronous Exceptions
+
+**Asynchronous exceptions** are beyond the program's control, caused by external factors.
+
+**Examples:**
+- Disc failure
+- Keyboard interrupts  
+- Network failures
+- System resource exhaustion
+- Hardware malfunctions
+
+These exceptions require different handling strategies since they're unpredictable and external to the program logic.
+
+## Exception Handling Rules and Patterns
+
+### Type Matching Requirements
+
+Exception handling follows strict rules for type matching between throw and catch blocks:
+
+#### Key Rules:
+- **Exact type match required**: The throw and catch types must match exactly
+- **No implicit conversion**: Implicit type conversion doesn't occur for primitive types
+- **First-match rule**: When multiple catch blocks exist, the first matching catch block is executed
+
+#### Type Matching Examples:
+
+```cpp
+// Example 1: Multiple catch blocks with same type
+try {
+    throw 100;
+}
+catch (int x) {     // This will catch the exception (first match)
+    std::cout << "First catch: " << x << std::endl;
+}
+catch (int y) {     // This won't execute due to first-match rule
+    std::cout << "Second catch: " << y << std::endl;
+}
+
+// Example 2: Type conversion doesn't happen
+try {
+    throw 100;      // Throwing int
+}
+catch (double x) {  // Won't catch int - no implicit conversion
+    std::cout << "Double catch: " << x << std::endl;
+}
+catch (int i) {     // Will catch the int
+    std::cout << "Int catch: " << i << std::endl;
+}
+```
+
+### Important Exception Handling Notes
+
+#### Uncaught Exceptions:
+- **Critical**: If an exception is thrown and not caught anywhere, the program terminates abnormally
+- Always ensure appropriate catch blocks exist for thrown exceptions
+
+#### Catch-All Handler:
+- **Special syntax**: `catch(...)` catches any exception type
+- **Modern practice**: Generally not recommended in current development
+- Use specific exception types for better error handling
+
+#### The throw() Specifier:
+```cpp
+const char* what() const throw()
+```
+- **Purpose**: Ensures the function will not throw an exception
+- **Critical for error handling**: Prevents nested exceptions
+- **Used in what() function**: Standard practice for exception classes
+
+## Function Pointers
+
+**Function pointers** store the address of functions, enabling dynamic function calls and callback mechanisms.
+
+### Basic Syntax:
+
+```cpp
+return_type (*FuncPtr)(parameter_type, ...);
+```
+
+### Function Pointer Examples:
+
+```cpp
+#include <iostream>
+
+// Function declarations
+void greetEnglish() { std::cout << "Hello!" << std::endl; }
+void greetFrench() { std::cout << "Bonjour!" << std::endl; }
+
+int add(int a, int b) { return a + b; }
+int multiply(int a, int b) { return a * b; }
+
+int main() {
+    // Function pointer declaration and assignment
+    void (*greetFunc)() = greetEnglish;
+    greetFunc(); // Calls greetEnglish()
+    
+    greetFunc = greetFrench;
+    greetFunc(); // Calls greetFrench()
+    
+    // Function pointer for functions with parameters
+    int (*mathFunc)(int, int) = add;
+    std::cout << "Result: " << mathFunc(5, 3) << std::endl; // Output: 8
+    
+    mathFunc = multiply;
+    std::cout << "Result: " << mathFunc(5, 3) << std::endl; // Output: 15
+    
+    return 0;
+}
+```
+
+### Array of Function Pointers:
+
+```cpp
+#include <iostream>
+
+void operation1() { std::cout << "Operation 1" << std::endl; }
+void operation2() { std::cout << "Operation 2" << std::endl; }
+void operation3() { std::cout << "Operation 3" << std::endl; }
+
+int main() {
+    // Array of function pointers
+    void (*operations[])() = {operation1, operation2, operation3};
+    
+    for (int i = 0; i < 3; i++) {
+        operations[i](); // Call each function
+    }
+    
+    return 0;
+}
+```
+
+## Insertion Operator Overloading (<<)
+
+The insertion operator `<<` can be overloaded to provide custom output formatting for user-defined classes.
+
+### Standard Pattern:
+
+```cpp
+std::ostream& operator<<(std::ostream& os, const ClassName& obj) {
+    os << /* object data */;
+    return os;
+}
+```
+
+### Comprehensive Example:
+
+```cpp
+#include <iostream>
+#include <fstream>
+#include <sstream>
+
+class Bureaucrat {
+private:
+    std::string name;
+    int grade;
+
+public:
+    Bureaucrat(const std::string& n, int g) : name(n), grade(g) {}
+    
+    const std::string& getName() const { return name; }
+    int getGrade() const { return grade; }
+};
+
+// Insertion operator overload
+std::ostream& operator<<(std::ostream& os, const Bureaucrat& obj) {
+    os << obj.getName() << ", bureaucrat grade " << obj.getGrade() << ".";
+    return os;
+}
+
+int main() {
+    Bureaucrat b("John", 5);
+    
+    // Console output
+    std::cout << b << std::endl;
+    
+    // File output
+    std::ofstream file("output.txt");
+    file << b << std::endl;
+    file.close();
+    
+    // String stream output
+    std::ostringstream oss;
+    oss << b;
+    std::string result = oss.str();
+    std::cout << "String: " << result << std::endl;
+    
+    // Chaining demonstration
+    std::cout << "Multiple objects: " << b << " and " << b << std::endl;
+    
+    return 0;
+}
+```
+
+### Why Use std::ostream& Parameter?
+
+#### Design Benefits:
+
+1. **Flexibility**: Works with any `std::ostream` derived class:
+   - `std::cout` (console output)
+   - `std::ofstream` (file output)
+   - `std::ostringstream` (string stream output)
+   - Any other stream type
+
+2. **Consistency**: Matches the standard C++ operator design pattern:
+   ```cpp
+   std::ostream& operator<<(std::ostream& os, int value);
+   std::ostream& operator<<(std::ostream& os, const std::string& str);
+   ```
+
+3. **Chaining Support**: The reference return enables operator chaining:
+   ```cpp
+   std::cout << obj1 << " and " << obj2 << std::endl;
+   ```
+
+#### What Happens Without std::ostream& Parameter?
+
+If you hardcode `std::cout` instead of using the parameter:
+
+```cpp
+// BAD: Limited to console output only
+std::ostream& operator<<(std::ostream& os, const Bureaucrat& obj) {
+    std::cout << obj.getName() << ", grade " << obj.getGrade();
+    return os;
+}
+```
+
+**Problems:**
+- **Limited functionality**: Only works for console output
+- **Breaks flexibility**: Cannot use with files, string streams, etc.
+- **Inconsistent design**: Doesn't follow C++ standard patterns
+
+#### Reference Parameters Benefits:
+
+1. **Avoids copying**: The `&` in both parameters prevents unnecessary object copying
+2. **Enables chaining**: The return reference allows multiple `<<` operations in sequence
+3. **Maintains stream state**: Preserves formatting flags and other stream properties
+
+## Assignment Operator Pattern
+
+### Reference Return in Assignment Operators:
+
+```cpp
+ClassName& ClassName::operator=(const ClassName& rhs) {
+    if (this != &rhs) {  // Self-assignment check
+        // Copy data from rhs
+    }
+    return (*this);  // Return reference to current object
+}
+```
+
+#### Why Return by Reference?
+
+1. **Efficiency**: Returning by reference avoids creating unnecessary copies
+2. **Chaining support**: Enables assignment chaining: `a = b = c`
+3. **Standard behavior**: Matches built-in type assignment semantics
+
+#### Reference vs Value Return:
+
+```cpp
+// With reference (GOOD)
+ClassName& operator=(const ClassName& rhs) {
+    return (*this);  // Efficient, enables chaining
+}
+
+// Without reference (LESS EFFICIENT)
+ClassName operator=(const ClassName& rhs) {
+    return (*this);  // Creates copy, but chaining still works
+}
+```
+
+**Impact of removing reference:**
+- **Chaining still works**: C++ handles this automatically
+- **Performance cost**: Creates unnecessary copies of the object
+- **Memory overhead**: Multiple copies for chained assignments like `a = b = c = d`
+
+## Key Concepts Summary
+
+### Exception Handling
+- **Exceptions are classes** that carry error information
+- **try-throw-catch** mechanism provides structured error handling
+- **Type matching** must be exact between throw and catch blocks
+- **Uncaught exceptions** cause abnormal program termination
+
+### Exception Types
+- **Synchronous**: Input/data errors that can be predicted and prevented
+- **Asynchronous**: External system failures beyond program control
+
+### Function Pointers
+- Store addresses of functions for dynamic calls
+- Enable callback mechanisms and flexible program design
+- Syntax: `return_type (*pointer_name)(parameter_types)`
+
+### Operator Overloading
+- **std::ostream&** parameter enables flexible output to any stream type
+- **Reference returns** enable chaining and avoid unnecessary copying
+- **Consistent patterns** follow C++ standard library design principles
+
+---
+
+*This module provides essential error handling mechanisms and advanced C++ features for building robust, maintainable applications.*
