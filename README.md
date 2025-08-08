@@ -6,7 +6,7 @@
 
 ## 🔍 Table of Contents
 
-### 🧠 Module 00: Fundamentals
+### 🧠 CPP Module 00: Fundamentals
 - [Namespaces](#namespaces)
 - [`std::` Namespace](#what-is-std)
 - [Scope Resolution Operator (`::`)](#scope-resolution-operator-)
@@ -20,14 +20,14 @@
 - [`const` Members](#const-members--const-member-functions)
 - [OOP Principles](#object-oriented-programming-oop)
 
-### 💾 Module 01: Memory & Flow
+### 💾 CPP Module 01: Memory & Flow
 - [Memory Allocation](#memory-allocation-in-c)
 - [Constructor Types](#constructor-types)
 - [Pointers to Members](#pointers-to-members-in-c)
 - [References](#references-in-c)
 - [Switch Statements](#switch-statement-in-c)
 
-### 🧩 Module 02: Polymorphism
+### 🧩 CPP Module 02: Polymorphism
 - [Ad-hoc Polymorphism](#ad-hoc-polymorphism)
 - [Function Overloading](#function-overloading)
 - [Operator Overloading](#operator-overloading)
@@ -35,7 +35,7 @@
 - [Orthodox Canonical Form](#orthodox-canonical-form)
 - [Floating Point Representation](#floating-point-representation)
 
-### 🧬 Module 03: Inheritance
+### 🧬 CPP Module 03: Inheritance
 - [Inheritance Fundamentals](#what-is-inheritance)
 - [Access Modes](#inheritance-modes)
 - [Single Inheritance](#1-single-inheritance)
@@ -43,21 +43,21 @@
 - [Multilevel Inheritance](#3-multilevel-inheritance)
 - [Hierarchical Inheritance](#4-hierarchical-inheritance)
 
-### 🌀 Module 04: Advanced OOP
+### 🌀 CPP Module 04: Advanced OOP
 - [Deep vs Shallow Copy](#deep-vs-shallow-copy)
 - [Virtual Functions](#virtual-functions-and-override)
 - [VTables](#vtable-virtual-table)
 - [Abstract Classes](#abstract-classes)
 - [Interfaces](#interfaces)
 
-### 🚨 Module 05: Error Handling
+### 🚨 CPP Module 05: Error Handling
 - [Exception Handling](#what-are-exceptions)
 - [Synchronous Exceptions](#1-synchronous-exceptions)
 - [Asynchronous Exceptions](#2-asynchronous-exceptions)
 - [Function Pointers](#function-pointers)
 - [Operator Overloading](#insertion-operator-overloading-)
 
-### 🔄 Module 06: Type Conversion
+### 🔄 CPP Module 06: Type Conversion
 - [Casting Fundamentals](#what-is-casting-in-c)
 - [`static_cast`](#3-static-cast)
 - [`dynamic_cast`](#4-dynamic-cast)
