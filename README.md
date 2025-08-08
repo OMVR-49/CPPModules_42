@@ -312,9 +312,9 @@ Encapsulation involves bundling data (attributes) and the methods (functions) th
 
 For more detailed information on specific topics, you might want to research:
 
-- `atoi()` function with strings in C++
-- `string.length()` vs. `string.size()`
-- `std::cin.getline()` vs. `std::cin`
+- [`atoi()` function with strings in C++](https://stackoverflow.com/questions/27640333/how-do-i-use-atoi-function-with-strings-in-c)
+- [`string.length()` vs. `string.size()`](https://stackoverflow.com/questions/31628940/which-is-faster-c-stdstringlength-or-stdstringsize)
+- [`std::cin.getline()` vs. `std::cin`](https://stackoverflow.com/questions/4745858/stdcin-getline-vs-stdcin)
 
 ---
 
