@@ -746,3 +746,503 @@ int main() {
 ---
 
 *This document covers all the essential concepts in CPP Module 01, providing you with the foundation needed to understand memory management, different constructor types, pointers to members, references, and control flow using switch statements in C++.*
+
+# CPP Module 02
+
+**Topics Covered:** Ad-hoc polymorphism, operator overloading and Orthodox Canonical class form
+
+## Summary
+
+This module covers advanced C++ concepts including:
+
+- **Ad-hoc Polymorphism:** The ability to define multiple functions or operators with the same name but different parameters
+- **Function Overloading:** Multiple functions with the same name but different parameter lists
+- **Operator Overloading:** Giving new meanings to operators for user-defined types
+- **Orthodox Canonical Form:** Essential components for well-defined classes in C++
+- **Copy Constructor:** Creating objects by copying existing objects of the same class
+- **Assignment Chaining:** Enabling multiple assignment operations in a single statement
+- **Floating Point Representation:** Understanding how floating point numbers are stored and represented
+
+## Ad-hoc Polymorphism
+
+Ad-hoc polymorphism refers to the ability to define multiple functions or operators with the same name but different parameters within the same scope. This allows functions or operators to perform different tasks based on the number or types of their arguments.
+
+There are two main types of ad-hoc polymorphism in C++:
+1. **Function Overloading**
+2. **Operator Overloading**
+
+## Function Overloading
+
+Function overloading allows you to create multiple functions with the same name but different parameter lists (different number of parameters, different types, or both).
+
+### Function Overloading Syntax
+
+```cpp
+return_type function_name(parameter_list_1);
+return_type function_name(parameter_list_2);
+```
+
+### Example
+
+```cpp
+#include <iostream>
+#include <string>
+
+class PrintHandler {
+public:
+    // Overloaded function with an int parameter
+    void print(int a) {
+        std::cout << "Integer: " << a << std::endl;
+    }
+    
+    // Overloaded function with a double parameter
+    void print(double a) {
+        std::cout << "Double: " << a << std::endl;
+    }
+    
+    // Overloaded function with a string parameter
+    void print(const std::string& a) {
+        std::cout << "String: " << a << std::endl;
+    }
+    
+    // Overloaded function with multiple parameters
+    void print(int a, double b) {
+        std::cout << "Int and Double: " << a << ", " << b << std::endl;
+    }
+};
+
+int main() {
+    PrintHandler handler;
+    
+    handler.print(42);           // Calls print(int)
+    handler.print(3.14159);      // Calls print(double)
+    handler.print("Hello");      // Calls print(string)
+    handler.print(10, 2.5);      // Calls print(int, double)
+    
+    return 0;
+}
+```
+
+## Operator Overloading
+
+Operator overloading allows you to define custom behaviors for operators when used with user-defined types (classes).
+
+### Operator Overloading Syntax
+
+```cpp
+return_type operator operator_symbol(parameter_list);
+```
+
+### Basic Example - Complex Numbers
+
+```cpp
+#include <iostream>
+
+class Complex {
+private:
+    double real, imag;
+
+public:
+    // Constructor
+    Complex(double r = 0, double i = 0) : real(r), imag(i) {}
+    
+    // Overloading the '+' operator
+    Complex operator+(const Complex& other) const {
+        return Complex(real + other.real, imag + other.imag);
+    }
+    
+    // Overloading the '-' operator
+    Complex operator-(const Complex& other) const {
+        return Complex(real - other.real, imag - other.imag);
+    }
+    
+    // Overloading the '==' operator
+    bool operator==(const Complex& other) const {
+        return (real == other.real && imag == other.imag);
+    }
+    
+    // Overloading the '<<' operator for output
+    friend std::ostream& operator<<(std::ostream& os, const Complex& c) {
+        os << c.real << " + " << c.imag << "i";
+        return os;
+    }
+    
+    // Display function
+    void display() const {
+        std::cout << real << " + " << imag << "i" << std::endl;
+    }
+};
+
+int main() {
+    Complex c1(3, 4);
+    Complex c2(1, 2);
+    
+    Complex c3 = c1 + c2;  // Uses overloaded + operator
+    Complex c4 = c1 - c2;  // Uses overloaded - operator
+    
+    std::cout << "c1: " << c1 << std::endl;
+    std::cout << "c2: " << c2 << std::endl;
+    std::cout << "c1 + c2: " << c3 << std::endl;
+    std::cout << "c1 - c2: " << c4 << std::endl;
+    
+    if (c1 == c2) {
+        std::cout << "c1 and c2 are equal" << std::endl;
+    } else {
+        std::cout << "c1 and c2 are not equal" << std::endl;
+    }
+    
+    return 0;
+}
+```
+
+## Assignment Chaining
+
+Assignment chaining allows multiple assignment operations in a single statement by returning a reference to the object being assigned. This is commonly used in operator overloading for the assignment operator (`=`).
+
+### Key Concept
+
+The overloaded assignment operator should return a reference to `*this`:
+
+```cpp
+MyClass& operator=(const MyClass& other) {
+    if (this != &other) {
+        // Perform the assignment
+    }
+    return *this; // Enables chaining
+}
+```
+
+### Example
+
+```cpp
+#include <iostream>
+
+class Number {
+private:
+    int value;
+
+public:
+    // Constructor
+    Number(int v = 0) : value(v) {}
+    
+    // Copy assignment operator with chaining support
+    Number& operator=(const Number& other) {
+        if (this != &other) {  // Self-assignment check
+            value = other.value;
+        }
+        return *this;  // Return reference for chaining
+    }
+    
+    // Getter
+    int getValue() const { return value; }
+    
+    // Display
+    void display() const {
+        std::cout << "Value: " << value << std::endl;
+    }
+};
+
+int main() {
+    Number a, b, c;
+    
+    c = Number(100);
+    
+    // Assignment chaining - equivalent to: a = (b = c);
+    a = b = c;
+    
+    std::cout << "After chained assignment:" << std::endl;
+    a.display();  // Value: 100
+    b.display();  // Value: 100
+    c.display();  // Value: 100
+    
+    return 0;
+}
+```
+
+## Orthodox Canonical Form
+
+The Orthodox Canonical Form (also known as the Rule of Three in modern C++) includes the following components essential for a well-defined class in C++:
+
+1. **Default Constructor:** Initializes an object without any parameters
+2. **Copy Constructor:** Initializes an object using another object of the same class
+3. **Copy Assignment Operator:** Assigns values from one object to another of the same class
+4. **Destructor:** Cleans up resources when an object goes out of scope
+
+### Complete Example
+
+```cpp
+#include <iostream>
+#include <cstring>
+
+class MyString {
+private:
+    char* data;
+    size_t length;
+
+public:
+    // 1. Default Constructor
+    MyString() : data(nullptr), length(0) {
+        std::cout << "Default constructor called" << std::endl;
+    }
+    
+    // Parameterized constructor
+    MyString(const char* str) {
+        if (str) {
+            length = strlen(str);
+            data = new char[length + 1];
+            strcpy(data, str);
+        } else {
+            data = nullptr;
+            length = 0;
+        }
+        std::cout << "Parameterized constructor called" << std::endl;
+    }
+    
+    // 2. Copy Constructor
+    MyString(const MyString& other) : length(other.length) {
+        if (other.data) {
+            data = new char[length + 1];
+            strcpy(data, other.data);
+        } else {
+            data = nullptr;
+        }
+        std::cout << "Copy constructor called" << std::endl;
+    }
+    
+    // 3. Copy Assignment Operator
+    MyString& operator=(const MyString& other) {
+        std::cout << "Assignment operator called" << std::endl;
+        
+        if (this != &other) {  // Self-assignment check
+            // Clean up existing data
+            delete[] data;
+            
+            // Copy new data
+            length = other.length;
+            if (other.data) {
+                data = new char[length + 1];
+                strcpy(data, other.data);
+            } else {
+                data = nullptr;
+            }
+        }
+        return *this;  // Enable chaining
+    }
+    
+    // 4. Destructor
+    ~MyString() {
+        delete[] data;
+        std::cout << "Destructor called" << std::endl;
+    }
+    
+    // Utility functions
+    const char* getString() const {
+        return data ? data : "";
+    }
+    
+    void display() const {
+        std::cout << "String: " << (data ? data : "null") << std::endl;
+    }
+};
+
+int main() {
+    MyString str1;                    // Default constructor
+    MyString str2("Hello");           // Parameterized constructor
+    MyString str3 = str2;             // Copy constructor
+    
+    str1 = str2;                      // Assignment operator
+    
+    str1.display();
+    str2.display();
+    str3.display();
+    
+    return 0;
+} // Destructors called for str3, str2, str1
+```
+
+## Copy Constructor Deep Dive
+
+A copy constructor creates an object by initializing it with an object of the same class that has been created previously. The copy constructor takes a reference to an object of the same class as an argument.
+
+### Syntax
+
+```cpp
+ClassName(const ClassName& other) {
+    // Initialize this object using other object
+}
+```
+
+### Example
+
+```cpp
+#include <iostream>
+
+class Example {
+private:
+    int id;
+    int* data;
+
+public:
+    // Constructor
+    Example(int i, int value) : id(i) {
+        data = new int(value);
+        std::cout << "Constructor called for id: " << id << std::endl;
+    }
+    
+    // Copy Constructor
+    Example(const Example& other) : id(other.id) {
+        data = new int(*(other.data));  // Deep copy
+        std::cout << "Copy constructor called for id: " << id << std::endl;
+    }
+    
+    // Destructor
+    ~Example() {
+        delete data;
+        std::cout << "Destructor called for id: " << id << std::endl;
+    }
+    
+    // Display
+    void display() const {
+        std::cout << "ID: " << id << ", Data: " << *data 
+                  << ", Address: " << data << std::endl;
+    }
+};
+
+int main() {
+    Example obj1(1, 100);        // Constructor called
+    Example obj2 = obj1;         // Copy constructor called
+    Example obj3(obj1);          // Copy constructor called
+    
+    obj1.display();
+    obj2.display();
+    obj3.display();
+    
+    return 0;
+}
+```
+
+The process of initializing members of an object through a copy constructor is known as **copy initialization**.
+
+## When is the Copy Constructor Called?
+
+The copy constructor is called in the following situations:
+
+1. **When an object of the class is returned by value**
+2. **When an object of the class is passed to a function by value as an argument**
+3. **When an object is constructed based on another object of the same class**
+4. **When the compiler generates a temporary object**
+
+### Examples
+
+```cpp
+#include <iostream>
+
+class Test {
+private:
+    int value;
+
+public:
+    Test(int v = 0) : value(v) {
+        std::cout << "Constructor called with value: " << value << std::endl;
+    }
+    
+    Test(const Test& other) : value(other.value) {
+        std::cout << "Copy constructor called" << std::endl;
+    }
+    
+    int getValue() const { return value; }
+};
+
+// Function that takes object by value
+void functionByValue(Test obj) {  // Copy constructor called here
+    std::cout << "Inside functionByValue: " << obj.getValue() << std::endl;
+}
+
+// Function that returns object by value
+Test functionReturnByValue() {
+    Test temp(42);
+    return temp;  // Copy constructor may be called here (depends on optimization)
+}
+
+int main() {
+    Test obj1(10);              // Constructor called
+    Test obj2 = obj1;           // Copy constructor called
+    Test obj3(obj1);            // Copy constructor called
+    
+    functionByValue(obj1);      // Copy constructor called
+    
+    Test obj4 = functionReturnByValue();  // Copy constructor may be called
+    
+    return 0;
+}
+```
+
+## Floating Point Representation
+
+Understanding floating point representation is crucial for working with decimal numbers in C++. Here are the key concepts you need to know:
+
+### IEEE 754 Standard
+
+Most systems use the IEEE 754 standard for floating point representation. A 32-bit float consists of:
+- **1 sign bit (S)**
+- **8 exponent bits (E)**
+- **23 mantissa bits (M)**
+
+### Formula for Float Numbers
+
+The value of a floating point number is calculated using:
+
+```
+(-1)^S × 1.M × 2^(E-127)
+```
+
+Where:
+- **S** is the sign bit (0 for positive, 1 for negative)
+- **M** is the mantissa (fractional part)
+- **E** is the exponent (biased by 127)
+
+### Special Cases: Infinity and NaN
+
+#### Infinity
+- If all exponent bits are set to 1 and all mantissa bits are zero, the number represents infinity
+- Can be positive infinity (+∞) or negative infinity (-∞) depending on the sign bit
+
+#### NaN (Not a Number)
+- If all exponent bits are set to 1 and at least one mantissa bit is non-zero, the number is NaN
+- NaN represents undefined or unrepresentable values (like 0/0 or √(-1))
+
+### Practical Example
+
+```cpp
+#include <iostream>
+#include <limits>
+#include <cmath>
+
+int main() {
+    float positiveInf = std::numeric_limits<float>::infinity();
+    float negativeInf = -std::numeric_limits<float>::infinity();
+    float notANumber = std::numeric_limits<float>::quiet_NaN();
+    
+    std::cout << "Positive Infinity: " << positiveInf << std::endl;
+    std::cout << "Negative Infinity: " << negativeInf << std::endl;
+    std::cout << "NaN: " << notANumber << std::endl;
+    
+    // Check for special values
+    std::cout << "Is positive infinity? " << std::isinf(positiveInf) << std::endl;
+    std::cout << "Is NaN? " << std::isnan(notANumber) << std::endl;
+    
+    // Operations that produce special values
+    float divByZero = 1.0f / 0.0f;  // Results in infinity
+    float undefinedOp = 0.0f / 0.0f;  // Results in NaN
+    
+    std::cout << "1.0/0.0 = " << divByZero << std::endl;
+    std::cout << "0.0/0.0 = " << undefinedOp << std::endl;
+    
+    return 0;
+}
+```
+
+---
+
+*This document covers all essential concepts in CPP Module 02, providing you with a comprehensive understanding of ad-hoc polymorphism, operator overloading, orthodox canonical form, and floating point representation in C++.*
+
