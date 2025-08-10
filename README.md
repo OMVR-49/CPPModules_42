@@ -66,7 +66,7 @@
 - [`uintptr_t`](#uintptr_t-pointer-to-integer-type)
 - [Virtual Destructors](#virtual-destructors)
 
-### CPP Module 07: Templates
+### ⚙️ CPP Module 07: Templates
 - [What Are Templates](#what-are-templates)
 - [Function Templates](#function-templates)
 - [Class Templates](#class-templates)
