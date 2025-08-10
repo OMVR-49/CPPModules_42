@@ -66,6 +66,15 @@
 - [`uintptr_t`](#uintptr_t-pointer-to-integer-type)
 - [Virtual Destructors](#virtual-destructors)
 
+### CPP Module 07: Templates
+- [What Are Templates](#what-are-templates)
+- [Function Templates](#function-templates)
+- [Class Templates](#class-templates)
+- [Template Specialization](#template-specialization)
+- [.tpp Files](#.tpp-files)
+- [File Organization Pattern](#file-organization-pattern)
+- [Template Best Practices](#template-best-practices)
+
 
 # CPP Module 00
 
@@ -3771,3 +3780,561 @@ int main() {
 4. **Use polymorphism and virtual functions**: When dealing with dynamic types, prefer designs that minimize the need for casting.
 
 *Casting in C++ provides powerful tools for type conversion, but with great power comes great responsibility. Always prioritize code safety and readability when employing casting mechanisms.*
+
+# CPP Module 07
+
+**Topics Covered:** Function templates, class templates, template instantiation, type deduction, .tpp files
+
+> *"Templates enable generic programming - write once, use with any type!"*
+
+## Overview
+
+In this module, we explore C++ templates that enable **generic programming**, allowing functions and classes to operate on various data types without rewriting code. Templates promote code reusability and type safety, forming the foundation of the Standard Template Library (STL). They are evaluated at compile time, generating type-specific code automatically through **instantiation**.
+
+## What Are Templates
+
+**Templates** are C++'s way of writing code that works with any data type. Instead of writing the same function or class multiple times for different types, you write it once using a placeholder type.
+
+### Key Benefits:
+- **Code reusability**: Write once, use with many types
+- **Type safety**: Compiler ensures type correctness
+- **Performance**: No runtime overhead - resolved at compile time
+- **STL foundation**: Powers containers like `vector`, `map`, `set`
+
+Think of templates as **smart copy-paste** - the compiler creates specialized versions for each type you use.
+
+## Function Templates
+
+**Function templates** define functions that work with any type using a placeholder `T` (or any name you choose).
+
+### Basic Syntax:
+```cpp
+template<typename T>  // or template<class T>
+T functionName(T param1, T param2) {
+    // Implementation using T
+}
+```
+
+### Simple Examples:
+
+```cpp
+#include <iostream>
+#include <string>
+
+// Basic function template
+template<typename T>
+T max(const T& a, const T& b) {
+    return (a < b) ? b : a;
+}
+
+// Template with multiple parameters
+template<typename T>
+void swap(T& a, T& b) {
+    T temp = a;
+    a = b;
+    b = temp;
+}
+
+// Template that works with different types
+template<typename T>
+void printValue(const T& value) {
+    std::cout << "Value: " << value << std::endl;
+}
+
+int main() {
+    // Type deduction - compiler figures out T automatically
+    int x = 5, y = 10;
+    std::cout << "Max of " << x << " and " << y << " is " << max(x, y) << std::endl;
+    
+    double d1 = 3.14, d2 = 2.71;
+    std::cout << "Max of " << d1 << " and " << d2 << " is " << max(d1, d2) << std::endl;
+    
+    std::string s1 = "hello", s2 = "world";
+    std::cout << "Max of '" << s1 << "' and '" << s2 << "' is '" << max(s1, s2) << "'" << std::endl;
+    
+    // Using swap template
+    std::cout << "\nBefore swap: x=" << x << ", y=" << y << std::endl;
+    swap(x, y);
+    std::cout << "After swap: x=" << x << ", y=" << y << std::endl;
+    
+    // Print different types
+    printValue(42);
+    printValue(3.14);
+    printValue("Templates are cool!");
+    
+    return 0;
+}
+```
+
+### Explicit Template Instantiation:
+
+Sometimes you need to specify the type explicitly:
+
+```cpp
+#include <iostream>
+
+template<typename T>
+T convert(double value) {
+    return static_cast<T>(value);
+}
+
+template<typename T, typename U>
+T add(T a, U b) {
+    return a + static_cast<T>(b);
+}
+
+int main() {
+    // Explicit type specification
+    int intValue = convert<int>(3.14);        // T = int
+    char charValue = convert<char>(65.7);     // T = char
+    
+    std::cout << "Converted to int: " << intValue << std::endl;      // 3
+    std::cout << "Converted to char: " << charValue << std::endl;    // A
+    
+    // Multiple template parameters
+    int result = add<int, double>(5, 3.14);   // T = int, U = double
+    std::cout << "5 + 3.14 = " << result << std::endl;              // 8
+    
+    return 0;
+}
+```
+
+### Function Templates with Non-Type Parameters:
+
+```cpp
+#include <iostream>
+#include <array>
+
+// Template with both type and non-type parameters
+template<typename T, size_t N>
+void printArray(const std::array<T, N>& arr) {
+    std::cout << "Array of " << N << " elements: ";
+    for (const auto& elem : arr) {
+        std::cout << elem << " ";
+    }
+    std::cout << std::endl;
+}
+
+template<int N>
+int power(int base) {
+    int result = 1;
+    for (int i = 0; i < N; ++i) {
+        result *= base;
+    }
+    return result;
+}
+
+int main() {
+    std::array<int, 5> intArr = {1, 2, 3, 4, 5};
+    std::array<double, 3> doubleArr = {1.1, 2.2, 3.3};
+    
+    printArray(intArr);     // T = int, N = 5
+    printArray(doubleArr);  // T = double, N = 3
+    
+    std::cout << "2^3 = " << power<3>(2) << std::endl;  // N = 3
+    std::cout << "5^4 = " << power<4>(5) << std::endl;  // N = 4
+    
+    return 0;
+}
+```
+
+## Class Templates
+
+**Class templates** create classes that can handle different data types, making them incredibly flexible and reusable.
+
+### Basic Syntax:
+```cpp
+template<typename T>
+class ClassName {
+    // Members using T
+};
+```
+
+### Simple Container Example:
+
+```cpp
+#include <iostream>
+#include <string>
+
+template<typename T>
+class MyContainer {
+private:
+    T element;
+    
+public:
+    MyContainer(const T& elem) : element(elem) {}
+    
+    T getElement() const { 
+        return element; 
+    }
+    
+    void setElement(const T& elem) { 
+        element = elem; 
+    }
+    
+    void display() const {
+        std::cout << "Container holds: " << element << std::endl;
+    }
+};
+
+int main() {
+    // Instantiate with different types
+    MyContainer<int> intContainer(42);
+    MyContainer<std::string> stringContainer("Hello Templates");
+    MyContainer<double> doubleContainer(3.14159);
+    
+    intContainer.display();
+    stringContainer.display();
+    doubleContainer.display();
+    
+    // Modify values
+    intContainer.setElement(100);
+    stringContainer.setElement("Updated string");
+    
+    std::cout << "\nAfter updates:" << std::endl;
+    intContainer.display();
+    stringContainer.display();
+    
+    return 0;
+}
+```
+
+### More Advanced Class Template:
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <stdexcept>
+
+template<typename T>
+class SimpleVector {
+private:
+    std::vector<T> data;
+    
+public:
+    // Constructor
+    SimpleVector() = default;
+    SimpleVector(size_t size) : data(size) {}
+    SimpleVector(size_t size, const T& value) : data(size, value) {}
+    
+    // Add element
+    void push_back(const T& value) {
+        data.push_back(value);
+    }
+    
+    // Access element
+    T& operator[](size_t index) {
+        return data[index];
+    }
+    
+    const T& operator[](size_t index) const {
+        return data[index];
+    }
+    
+    // Safe access with bounds checking
+    T& at(size_t index) {
+        if (index >= data.size()) {
+            throw std::out_of_range("Index out of range");
+        }
+        return data[index];
+    }
+    
+    // Size and capacity
+    size_t size() const { return data.size(); }
+    bool empty() const { return data.empty(); }
+    
+    // Iterator support
+    typename std::vector<T>::iterator begin() { return data.begin(); }
+    typename std::vector<T>::iterator end() { return data.end(); }
+    typename std::vector<T>::const_iterator begin() const { return data.begin(); }
+    typename std::vector<T>::const_iterator end() const { return data.end(); }
+    
+    // Display all elements
+    void display() const {
+        std::cout << "[";
+        for (size_t i = 0; i < data.size(); ++i) {
+            std::cout << data[i];
+            if (i < data.size() - 1) std::cout << ", ";
+        }
+        std::cout << "]" << std::endl;
+    }
+};
+
+int main() {
+    // Create vectors of different types
+    SimpleVector<int> intVec;
+    SimpleVector<std::string> stringVec;
+    SimpleVector<double> doubleVec(3, 1.5);  // 3 elements, all 1.5
+    
+    // Add elements to int vector
+    intVec.push_back(10);
+    intVec.push_back(20);
+    intVec.push_back(30);
+    
+    // Add elements to string vector
+    stringVec.push_back("First");
+    stringVec.push_back("Second");
+    stringVec.push_back("Third");
+    
+    // Display vectors
+    std::cout << "Int vector: ";
+    intVec.display();
+    
+    std::cout << "String vector: ";
+    stringVec.display();
+    
+    std::cout << "Double vector: ";
+    doubleVec.display();
+    
+    // Access elements
+    std::cout << "\nAccessing elements:" << std::endl;
+    std::cout << "intVec[1] = " << intVec[1] << std::endl;
+    std::cout << "stringVec[0] = " << stringVec[0] << std::endl;
+    
+    // Range-based for loop (thanks to iterators)
+    std::cout << "\nUsing range-based for loop on intVec: ";
+    for (const auto& value : intVec) {
+        std::cout << value << " ";
+    }
+    std::cout << std::endl;
+    
+    return 0;
+}
+```
+
+## Template Specialization
+
+Sometimes you need different behavior for specific types:
+
+```cpp
+#include <iostream>
+#include <string>
+
+// Primary template
+template<typename T>
+class Printer {
+public:
+    void print(const T& value) {
+        std::cout << "Generic: " << value << std::endl;
+    }
+};
+
+// Specialization for strings
+template<>
+class Printer<std::string> {
+public:
+    void print(const std::string& value) {
+        std::cout << "String: \"" << value << "\"" << std::endl;
+    }
+};
+
+// Specialization for bool
+template<>
+class Printer<bool> {
+public:
+    void print(const bool& value) {
+        std::cout << "Boolean: " << (value ? "true" : "false") << std::endl;
+    }
+};
+
+int main() {
+    Printer<int> intPrinter;
+    Printer<std::string> stringPrinter;
+    Printer<bool> boolPrinter;
+    Printer<double> doublePrinter;
+    
+    intPrinter.print(42);                    // Uses generic
+    stringPrinter.print("Hello World");     // Uses string specialization
+    boolPrinter.print(true);                // Uses bool specialization
+    doublePrinter.print(3.14);              // Uses generic
+    
+    return 0;
+}
+```
+
+## .tpp Files
+
+Due to how templates are instantiated, **template implementations must be visible to the compiler** when they're used. The `.tpp` (template implementation) file pattern helps organize template code.
+
+### Why .tpp Files?
+- **Template instantiation**: Compiler needs full template definition to generate code
+- **Organization**: Keeps interface (`.hpp`) and implementation (`.tpp`) separate  
+- **Readability**: Cleaner header files, detailed implementations separate
+
+### File Organization Pattern:
+
+**MyContainer.hpp** (Declaration):
+```cpp
+#ifndef MYCONTAINER_HPP
+#define MYCONTAINER_HPP
+
+#include <iostream>
+
+template<typename T>
+class MyContainer {
+private:
+    T* data;
+    size_t capacity;
+    size_t count;
+    
+public:
+    MyContainer(size_t cap = 10);
+    ~MyContainer();
+    
+    void add(const T& item);
+    T& get(size_t index);
+    const T& get(size_t index) const;
+    size_t size() const;
+    void display() const;
+};
+
+#include "MyContainer.tpp"  // Include implementation
+
+#endif
+```
+
+**MyContainer.tpp** (Implementation):
+```cpp
+#include "MyContainer.hpp"
+
+template<typename T>
+MyContainer<T>::MyContainer(size_t cap) : capacity(cap), count(0) {
+    data = new T[capacity];
+    std::cout << "Container created with capacity " << capacity << std::endl;
+}
+
+template<typename T>
+MyContainer<T>::~MyContainer() {
+    delete[] data;
+    std::cout << "Container destroyed" << std::endl;
+}
+
+template<typename T>
+void MyContainer<T>::add(const T& item) {
+    if (count < capacity) {
+        data[count++] = item;
+    } else {
+        std::cout << "Container is full!" << std::endl;
+    }
+}
+
+template<typename T>
+T& MyContainer<T>::get(size_t index) {
+    if (index >= count) {
+        throw std::out_of_range("Index out of range");
+    }
+    return data[index];
+}
+
+template<typename T>
+const T& MyContainer<T>::get(size_t index) const {
+    if (index >= count) {
+        throw std::out_of_range("Index out of range");
+    }
+    return data[index];
+}
+
+template<typename T>
+size_t MyContainer<T>::size() const {
+    return count;
+}
+
+template<typename T>
+void MyContainer<T>::display() const {
+    std::cout << "Container contents: ";
+    for (size_t i = 0; i < count; ++i) {
+        std::cout << data[i] << " ";
+    }
+    std::cout << std::endl;
+}
+```
+
+**main.cpp** (Usage):
+```cpp
+#include <iostream>
+#include "MyContainer.hpp"
+
+int main() {
+    // The compiler will instantiate MyContainer<int> and MyContainer<std::string>
+    MyContainer<int> intContainer(5);
+    MyContainer<std::string> stringContainer(3);
+    
+    // Add elements
+    intContainer.add(10);
+    intContainer.add(20);
+    intContainer.add(30);
+    
+    stringContainer.add("First");
+    stringContainer.add("Second");
+    
+    // Display containers
+    intContainer.display();
+    stringContainer.display();
+    
+    // Access elements
+    std::cout << "First int: " << intContainer.get(0) << std::endl;
+    std::cout << "Second string: " << stringContainer.get(1) << std::endl;
+    
+    return 0;
+}
+```
+
+## Template Best Practices
+
+### 1. Keep Templates Simple
+```cpp
+// GOOD: Simple, clear template
+template<typename T>
+T add(const T& a, const T& b) {
+    return a + b;
+}
+
+// AVOID: Overly complex templates that are hard to understand
+template<typename T, typename U, typename V, int N, bool Flag>
+class ComplexTemplate { /* ... */ };
+```
+
+### 2. Use Meaningful Names
+```cpp
+// BAD: Unclear names
+template<typename X, typename Y>
+class Thing { /* ... */ };
+
+// GOOD: Descriptive names
+template<typename Key, typename Value>
+class Map { /* ... */ };
+```
+
+
+
+## Key Concepts Summary
+
+### Templates Fundamentals
+- **Generic programming**: Write code once, use with multiple types
+- **Compile-time**: Templates resolved during compilation, no runtime overhead
+- **Type safety**: Compiler ensures correct type usage
+
+### Function Templates
+- Use `template<typename T>` to create generic functions
+- **Type deduction**: Compiler can automatically determine types
+- **Explicit instantiation**: Can specify types manually when needed
+
+### Class Templates  
+- Create flexible classes that work with different data types
+- Must specify type when creating instances: `MyClass<int> obj`
+- Can have multiple template parameters
+
+### Template Organization
+- **`.tpp` files**: Separate implementation for better organization
+- Template code must be visible during compilation
+- Include `.tpp` at end of header file
+
+### Best Practices
+- Keep templates simple and readable
+- Use meaningful parameter names
+- Don't overuse - sometimes regular functions/classes are better
+
+---
+
+*Templates are powerful tools that make C++ code more flexible and reusable. Master them to write elegant, efficient code that works with any data type!*
+
