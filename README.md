@@ -71,7 +71,7 @@
 - [Function Templates](#function-templates)
 - [Class Templates](#class-templates)
 - [Template Specialization](#template-specialization)
-- [.tpp Files](#.tpp-files)
+- [.tpp Files](#tpp-files)
 - [File Organization Pattern](#file-organization-pattern)
 - [Template Best Practices](#template-best-practices)
 
