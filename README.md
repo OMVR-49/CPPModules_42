@@ -50,7 +50,7 @@
 - [Abstract Classes](#abstract-classes)
 - [Interfaces](#interfaces)
 
-### 🚨 CPP Module 05: Error Handling
+### 🚨 CPP Module 05: Exception Handling
 - [Exception Handling](#what-are-exceptions)
 - [Synchronous Exceptions](#1-synchronous-exceptions)
 - [Asynchronous Exceptions](#2-asynchronous-exceptions)
@@ -75,6 +75,15 @@
 - [File Organization Pattern](#file-organization-pattern)
 - [Template Best Practices](#template-best-practices)
 
+### CPP Module 08: Containers, Iterators and Algorithms
+- [Containers](#containers)
+- [Iterators](#iterators)
+- [Algorithms](#algorithms)
+- [Function Objects and Predicates](#function-objects-and-predicates)
+- [Practical STL Usage Patterns](#practical-STL-usage-patterns)
+- [Custom Container Implementation](#custom-container-implementation)
+- [Performance Considerations](#performance-considerations)
+- [Best Practices and Common Patterns](#best-practices-and-common-patterns)
 
 # CPP Module 00
 
@@ -4337,4 +4346,848 @@ class Map { /* ... */ };
 ---
 
 *Templates are powerful tools that make C++ code more flexible and reusable. Master them to write elegant, efficient code that works with any data type!*
+
+# CPP Module 08
+
+**Topics Covered:** Templated containers, iterators, algorithms, STL usage, container adaptation
+
+> *"The STL is C++'s treasure chest - containers, iterators, and algorithms working in perfect harmony!"*
+
+## Overview
+
+This module introduces the **Standard Template Library (STL)**, focusing on templated containers, iterators, and algorithms. You'll learn how these three pillars of the STL work together to create powerful, generic, and efficient C++ programs. Unlike previous modules, here we **embrace the STL** - using containers like `vector`, `list`, `map`, and algorithms from `<algorithm>` wherever appropriate.
+
+## What is the STL
+
+The **Standard Template Library (STL)** is C++'s collection of template classes and functions that provide common data structures and algorithms. It's built on three fundamental concepts:
+
+### The Three Pillars:
+- **Containers**: Data structures that store elements (`vector`, `list`, `map`, `set`, etc.)
+- **Iterators**: Objects that traverse container elements (like smart pointers)
+- **Algorithms**: Functions that operate on containers via iterators (`find`, `sort`, `copy`, etc.)
+
+Think of the STL as a **well-orchestrated symphony** - containers hold the data, iterators provide access, and algorithms manipulate the data.
+
+## Containers
+
+**Containers** are template classes that manage collections of objects. They provide different performance characteristics and interfaces for various use cases.
+
+### Sequence Containers
+
+Store elements in a specific order:
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <list>
+#include <deque>
+
+void demonstrateSequenceContainers() {
+    // Vector - dynamic array, fast random access
+    std::vector<int> numbers;
+    numbers.push_back(10);
+    numbers.push_back(20);
+    numbers.push_back(30);
+    
+    std::cout << "Vector: ";
+    for (size_t i = 0; i < numbers.size(); ++i) {
+        std::cout << numbers[i] << " ";  // Random access
+    }
+    std::cout << std::endl;
+    
+    // List - doubly linked list, fast insertion/deletion
+    std::list<std::string> words;
+    words.push_back("Hello");
+    words.push_front("World");  // Efficient front insertion
+    words.push_back("STL");
+    
+    std::cout << "List: ";
+    for (std::list<std::string>::iterator it = words.begin(); 
+         it != words.end(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+    
+    // Deque - double-ended queue
+    std::deque<char> letters;
+    letters.push_back('B');
+    letters.push_front('A');    // Efficient at both ends
+    letters.push_back('C');
+    
+    std::cout << "Deque: ";
+    for (size_t i = 0; i < letters.size(); ++i) {
+        std::cout << letters[i] << " ";
+    }
+    std::cout << std::endl;
+}
+```
+
+### Associative Containers
+
+Store elements in a sorted order based on keys:
+
+```cpp
+#include <iostream>
+#include <map>
+#include <set>
+
+void demonstrateAssociativeContainers() {
+    // Map - key-value pairs, sorted by key
+    std::map<std::string, int> ages;
+    ages["Alice"] = 25;
+    ages["Bob"] = 30;
+    ages["Charlie"] = 22;
+    
+    std::cout << "Ages map:" << std::endl;
+    for (std::map<std::string, int>::iterator it = ages.begin(); 
+         it != ages.end(); ++it) {
+        std::cout << it->first << ": " << it->second << std::endl;
+    }
+    
+    // Set - unique elements, sorted
+    std::set<int> uniqueNumbers;
+    uniqueNumbers.insert(5);
+    uniqueNumbers.insert(2);
+    uniqueNumbers.insert(8);
+    uniqueNumbers.insert(2);  // Duplicate, won't be added
+    
+    std::cout << "Unique numbers: ";
+    for (std::set<int>::iterator it = uniqueNumbers.begin(); 
+         it != uniqueNumbers.end(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+}
+```
+
+### Container Adapters
+
+Provide different interfaces to existing containers:
+
+```cpp
+#include <iostream>
+#include <stack>
+#include <queue>
+#include <vector>
+
+void demonstrateContainerAdapters() {
+    // Stack - LIFO (Last In, First Out)
+    std::stack<int> myStack;
+    myStack.push(1);
+    myStack.push(2);
+    myStack.push(3);
+    
+    std::cout << "Stack (LIFO): ";
+    while (!myStack.empty()) {
+        std::cout << myStack.top() << " ";
+        myStack.pop();
+    }
+    std::cout << std::endl;
+    
+    // Queue - FIFO (First In, First Out)
+    std::queue<std::string> myQueue;
+    myQueue.push("First");
+    myQueue.push("Second");
+    myQueue.push("Third");
+    
+    std::cout << "Queue (FIFO): ";
+    while (!myQueue.empty()) {
+        std::cout << myQueue.front() << " ";
+        myQueue.pop();
+    }
+    std::cout << std::endl;
+    
+    // Priority Queue - elements ordered by priority
+    std::priority_queue<int> pq;
+    pq.push(30);
+    pq.push(10);
+    pq.push(20);
+    
+    std::cout << "Priority Queue (max first): ";
+    while (!pq.empty()) {
+        std::cout << pq.top() << " ";
+        pq.pop();
+    }
+    std::cout << std::endl;
+}
+```
+
+## Iterators
+
+**Iterators** are objects that traverse container elements, acting like generalized pointers. They provide a uniform interface for accessing container elements.
+
+### Iterator Categories
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <list>
+#include <iterator>
+
+void demonstrateIterators() {
+    std::vector<int> vec;
+    vec.push_back(1);
+    vec.push_back(2);
+    vec.push_back(3);
+    vec.push_back(4);
+    vec.push_back(5);
+    
+    // Forward iteration
+    std::cout << "Forward: ";
+    for (std::vector<int>::iterator it = vec.begin(); 
+         it != vec.end(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+    
+    // Reverse iteration
+    std::cout << "Reverse: ";
+    for (std::vector<int>::reverse_iterator rit = vec.rbegin(); 
+         rit != vec.rend(); ++rit) {
+        std::cout << *rit << " ";
+    }
+    std::cout << std::endl;
+    
+    // Const iteration (read-only)
+    const std::vector<int>& constVec = vec;
+    std::cout << "Const: ";
+    for (std::vector<int>::const_iterator cit = constVec.begin(); 
+         cit != constVec.end(); ++cit) {
+        std::cout << *cit << " ";
+        // *cit = 10;  // Error! Can't modify through const_iterator
+    }
+    std::cout << std::endl;
+    
+    // Random access (only for vector, deque)
+    std::vector<int>::iterator it = vec.begin();
+    it += 2;  // Jump to third element
+    std::cout << "Third element: " << *it << std::endl;
+    
+    // Distance and advance
+    std::vector<int>::iterator start = vec.begin();
+    std::vector<int>::iterator end = vec.end();
+    std::cout << "Container size: " << std::distance(start, end) << std::endl;
+}
+```
+
+### Iterator Operations
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <list>
+
+void iteratorOperations() {
+    std::vector<int> numbers;
+    numbers.push_back(10);
+    numbers.push_back(20);
+    numbers.push_back(30);
+    numbers.push_back(40);
+    
+    // Find an element
+    std::vector<int>::iterator found = numbers.begin();
+    while (found != numbers.end() && *found != 30) {
+        ++found;
+    }
+    
+    if (found != numbers.end()) {
+        std::cout << "Found: " << *found << std::endl;
+        
+        // Insert before found element
+        numbers.insert(found, 25);
+        
+        // Note: 'found' iterator might be invalidated after insertion
+        // Better to find again or use the returned iterator
+    }
+    
+    // Display modified vector
+    std::cout << "After insertion: ";
+    for (std::vector<int>::iterator it = numbers.begin(); 
+         it != numbers.end(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+    
+    // Erase elements
+    std::vector<int>::iterator toErase = numbers.begin();
+    ++toErase;  // Point to second element
+    numbers.erase(toErase);
+    
+    std::cout << "After erase: ";
+    for (std::vector<int>::iterator it = numbers.begin(); 
+         it != numbers.end(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+}
+```
+
+## Algorithms
+
+**Algorithms** are function templates that perform operations on containers through iterators. They're generic and work with any compatible container.
+
+### Non-modifying Algorithms
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <numeric>
+
+void nonModifyingAlgorithms() {
+    std::vector<int> numbers;
+    numbers.push_back(5);
+    numbers.push_back(2);
+    numbers.push_back(8);
+    numbers.push_back(2);
+    numbers.push_back(9);
+    
+    // Find first occurrence
+    std::vector<int>::iterator found = std::find(numbers.begin(), numbers.end(), 2);
+    if (found != numbers.end()) {
+        std::cout << "Found 2 at position: " << std::distance(numbers.begin(), found) << std::endl;
+    }
+    
+    // Count occurrences
+    int count = std::count(numbers.begin(), numbers.end(), 2);
+    std::cout << "Number 2 appears " << count << " times" << std::endl;
+    
+    // Find minimum and maximum
+    std::vector<int>::iterator minIt = std::min_element(numbers.begin(), numbers.end());
+    std::vector<int>::iterator maxIt = std::max_element(numbers.begin(), numbers.end());
+    
+    std::cout << "Min: " << *minIt << ", Max: " << *maxIt << std::endl;
+    
+    // Accumulate (sum all elements)
+    int sum = std::accumulate(numbers.begin(), numbers.end(), 0);
+    std::cout << "Sum: " << sum << std::endl;
+    
+    // Check if all elements satisfy condition
+    bool allPositive = std::find_if(numbers.begin(), numbers.end(), 
+                                   std::bind2nd(std::less_equal<int>(), 0)) == numbers.end();
+    std::cout << "All positive: " << (allPositive ? "Yes" : "No") << std::endl;
+}
+```
+
+### Modifying Algorithms
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+void modifyingAlgorithms() {
+    std::vector<int> source;
+    source.push_back(1);
+    source.push_back(2);
+    source.push_back(3);
+    source.push_back(4);
+    source.push_back(5);
+    
+    std::vector<int> dest(5);  // Pre-allocate space
+    
+    // Copy elements
+    std::copy(source.begin(), source.end(), dest.begin());
+    
+    std::cout << "Copied: ";
+    for (std::vector<int>::iterator it = dest.begin(); it != dest.end(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+    
+    // Fill with value
+    std::vector<int> filled(5);
+    std::fill(filled.begin(), filled.end(), 42);
+    
+    std::cout << "Filled: ";
+    for (std::vector<int>::iterator it = filled.begin(); it != filled.end(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+    
+    // Transform elements (square each number)
+    std::vector<int> squared(source.size());
+    std::transform(source.begin(), source.end(), squared.begin(), 
+                   std::bind2nd(std::multiplies<int>(), 2));  // Multiply by 2
+    
+    std::cout << "Doubled: ";
+    for (std::vector<int>::iterator it = squared.begin(); it != squared.end(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+    
+    // Replace values
+    std::vector<int> replaceable = source;  // Copy
+    std::replace(replaceable.begin(), replaceable.end(), 3, 99);
+    
+    std::cout << "Replaced 3 with 99: ";
+    for (std::vector<int>::iterator it = replaceable.begin(); it != replaceable.end(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+}
+```
+
+### Sorting and Searching
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+void sortingAndSearching() {
+    std::vector<int> numbers;
+    numbers.push_back(64);
+    numbers.push_back(34);
+    numbers.push_back(25);
+    numbers.push_back(12);
+    numbers.push_back(22);
+    numbers.push_back(11);
+    
+    std::cout << "Original: ";
+    for (std::vector<int>::iterator it = numbers.begin(); it != numbers.end(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+    
+    // Sort in ascending order
+    std::sort(numbers.begin(), numbers.end());
+    
+    std::cout << "Sorted: ";
+    for (std::vector<int>::iterator it = numbers.begin(); it != numbers.end(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+    
+    // Binary search (requires sorted container)
+    bool found = std::binary_search(numbers.begin(), numbers.end(), 25);
+    std::cout << "25 found: " << (found ? "Yes" : "No") << std::endl;
+    
+    // Lower bound (first position where element could be inserted)
+    std::vector<int>::iterator pos = std::lower_bound(numbers.begin(), numbers.end(), 20);
+    std::cout << "Lower bound for 20: position " << std::distance(numbers.begin(), pos) << std::endl;
+    
+    // Sort in descending order
+    std::sort(numbers.begin(), numbers.end(), std::greater<int>());
+    
+    std::cout << "Descending: ";
+    for (std::vector<int>::iterator it = numbers.begin(); it != numbers.end(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+    
+    // Partial sort - sort only first 3 elements
+    std::vector<int> partialSort = numbers;  // Copy
+    std::partial_sort(partialSort.begin(), partialSort.begin() + 3, partialSort.end());
+    
+    std::cout << "Partial sort (first 3): ";
+    for (std::vector<int>::iterator it = partialSort.begin(); it != partialSort.end(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+}
+```
+
+## Function Objects and Predicates
+
+**Function objects** (functors) are objects that can be called like functions. They're often used with algorithms.
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <functional>
+
+// Custom function object
+struct IsEven {
+    bool operator()(int n) const {
+        return n % 2 == 0;
+    }
+};
+
+struct MultiplyBy {
+    int factor;
+    
+    MultiplyBy(int f) : factor(f) {}
+    
+    int operator()(int n) const {
+        return n * factor;
+    }
+};
+
+void functionObjects() {
+    std::vector<int> numbers;
+    numbers.push_back(1);
+    numbers.push_back(2);
+    numbers.push_back(3);
+    numbers.push_back(4);
+    numbers.push_back(5);
+    numbers.push_back(6);
+    
+    // Count even numbers using custom functor
+    int evenCount = std::count_if(numbers.begin(), numbers.end(), IsEven());
+    std::cout << "Even numbers: " << evenCount << std::endl;
+    
+    // Transform using custom functor
+    std::vector<int> tripled(numbers.size());
+    std::transform(numbers.begin(), numbers.end(), tripled.begin(), MultiplyBy(3));
+    
+    std::cout << "Tripled: ";
+    for (std::vector<int>::iterator it = tripled.begin(); it != tripled.end(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+    
+    // Using standard function objects
+    std::vector<int> sorted = numbers;
+    std::sort(sorted.begin(), sorted.end(), std::greater<int>());
+    
+    std::cout << "Sorted descending: ";
+    for (std::vector<int>::iterator it = sorted.begin(); it != sorted.end(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+    
+    // Using bind2nd (C++98 way)
+    int greaterThanThree = std::count_if(numbers.begin(), numbers.end(), 
+                                        std::bind2nd(std::greater<int>(), 3));
+    std::cout << "Numbers > 3: " << greaterThanThree << std::endl;
+}
+```
+
+## Practical STL Usage Patterns
+
+### Container Selection Guide
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <list>
+#include <map>
+#include <set>
+
+void containerSelectionDemo() {
+    // Use vector when:
+    // - Need random access to elements
+    // - Frequently access elements by index
+    // - Memory efficiency is important
+    std::vector<int> scores;
+    scores.reserve(1000);  // Pre-allocate for performance
+    
+    // Use list when:
+    // - Frequently insert/delete in middle
+    // - Don't need random access
+    // - Iterator stability is important
+    std::list<std::string> taskQueue;
+    taskQueue.push_back("Task 1");
+    taskQueue.push_front("Urgent Task");
+    
+    // Use map when:
+    // - Need key-value associations
+    // - Need sorted keys
+    // - Fast lookup by key
+    std::map<std::string, int> wordCount;
+    wordCount["hello"] = 5;
+    wordCount["world"] = 3;
+    
+    // Use set when:
+    // - Need unique elements
+    // - Need sorted elements
+    // - Fast membership testing
+    std::set<int> uniqueIds;
+    uniqueIds.insert(100);
+    uniqueIds.insert(200);
+    uniqueIds.insert(100);  // Duplicate ignored
+    
+    std::cout << "Vector size: " << scores.size() << std::endl;
+    std::cout << "List size: " << taskQueue.size() << std::endl;
+    std::cout << "Map size: " << wordCount.size() << std::endl;
+    std::cout << "Set size: " << uniqueIds.size() << std::endl;
+}
+```
+
+### Iterator-Algorithm Combinations
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <iterator>
+
+void iteratorAlgorithmPatterns() {
+    std::vector<int> source;
+    source.push_back(1);
+    source.push_back(2);
+    source.push_back(3);
+    source.push_back(4);
+    source.push_back(5);
+    
+    // Pattern 1: Filter and copy
+    std::vector<int> evens;
+    for (std::vector<int>::iterator it = source.begin(); it != source.end(); ++it) {
+        if (*it % 2 == 0) {
+            evens.push_back(*it);
+        }
+    }
+    
+    std::cout << "Even numbers: ";
+    for (std::vector<int>::iterator it = evens.begin(); it != evens.end(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+    
+    // Pattern 2: Remove elements
+    std::vector<int> filtered = source;
+    filtered.erase(std::remove_if(filtered.begin(), filtered.end(), 
+                                 std::bind2nd(std::greater<int>(), 3)), 
+                   filtered.end());
+    
+    std::cout << "Elements <= 3: ";
+    for (std::vector<int>::iterator it = filtered.begin(); it != filtered.end(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+    
+    // Pattern 3: Find and process
+    std::vector<int>::iterator found = std::find_if(source.begin(), source.end(), 
+                                                   std::bind2nd(std::greater<int>(), 3));
+    if (found != source.end()) {
+        std::cout << "First element > 3: " << *found << std::endl;
+        
+        // Process remaining elements
+        std::cout << "Remaining elements: ";
+        for (std::vector<int>::iterator it = found; it != source.end(); ++it) {
+            std::cout << *it << " ";
+        }
+        std::cout << std::endl;
+    }
+}
+```
+
+## Custom Container Implementation
+
+Sometimes you need to adapt existing containers or create iterators for custom classes:
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <iterator>
+#include <algorithm>
+
+template<typename T>
+class SimpleContainer {
+private:
+    std::vector<T> data;
+    
+public:
+    // Iterator type definitions
+    typedef typename std::vector<T>::iterator iterator;
+    typedef typename std::vector<T>::const_iterator const_iterator;
+    typedef typename std::vector<T>::reverse_iterator reverse_iterator;
+    typedef typename std::vector<T>::const_reverse_iterator const_reverse_iterator;
+    
+    // Container interface
+    void push_back(const T& value) {
+        data.push_back(value);
+    }
+    
+    size_t size() const {
+        return data.size();
+    }
+    
+    bool empty() const {
+        return data.empty();
+    }
+    
+    // Iterator interface
+    iterator begin() { return data.begin(); }
+    iterator end() { return data.end(); }
+    const_iterator begin() const { return data.begin(); }
+    const_iterator end() const { return data.end(); }
+    
+    reverse_iterator rbegin() { return data.rbegin(); }
+    reverse_iterator rend() { return data.rend(); }
+    const_reverse_iterator rbegin() const { return data.rbegin(); }
+    const_reverse_iterator rend() const { return data.rend(); }
+    
+    // Element access
+    T& operator[](size_t index) { return data[index]; }
+    const T& operator[](size_t index) const { return data[index]; }
+};
+
+void customContainerDemo() {
+    SimpleContainer<int> container;
+    container.push_back(10);
+    container.push_back(20);
+    container.push_back(30);
+    container.push_back(40);
+    
+    // Works with STL algorithms!
+    std::cout << "Container contents: ";
+    std::copy(container.begin(), container.end(), 
+              std::ostream_iterator<int>(std::cout, " "));
+    std::cout << std::endl;
+    
+    // Find element
+    SimpleContainer<int>::iterator found = std::find(container.begin(), container.end(), 20);
+    if (found != container.end()) {
+        std::cout << "Found: " << *found << std::endl;
+    }
+    
+    // Sort the container
+    std::sort(container.begin(), container.end(), std::greater<int>());
+    
+    std::cout << "Sorted descending: ";
+    for (SimpleContainer<int>::iterator it = container.begin(); it != container.end(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+}
+```
+
+## Performance Considerations
+
+### Container Performance Characteristics
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <list>
+#include <deque>
+#include <ctime>
+
+void performanceDemo() {
+    const size_t SIZE = 10000;
+    
+    // Vector - excellent for random access, good for back insertion
+    std::vector<int> vec;
+    vec.reserve(SIZE);  // Important for performance!
+    
+    clock_t start = clock();
+    for (size_t i = 0; i < SIZE; ++i) {
+        vec.push_back(i);
+    }
+    clock_t end = clock();
+    
+    std::cout << "Vector push_back time: " 
+              << double(end - start) / CLOCKS_PER_SEC << " seconds" << std::endl;
+    
+    // List - excellent for insertion anywhere, poor for random access
+    std::list<int> lst;
+    
+    start = clock();
+    for (size_t i = 0; i < SIZE; ++i) {
+        lst.push_back(i);
+    }
+    end = clock();
+    
+    std::cout << "List push_back time: " 
+              << double(end - start) / CLOCKS_PER_SEC << " seconds" << std::endl;
+    
+    // Algorithm performance on different containers
+    start = clock();
+    std::find(vec.begin(), vec.end(), SIZE - 1);
+    end = clock();
+    
+    std::cout << "Vector find time: " 
+              << double(end - start) / CLOCKS_PER_SEC << " seconds" << std::endl;
+    
+    start = clock();
+    std::find(lst.begin(), lst.end(), SIZE - 1);
+    end = clock();
+    
+    std::cout << "List find time: " 
+              << double(end - start) / CLOCKS_PER_SEC << " seconds" << std::endl;
+}
+```
+
+## Best Practices and Common Patterns
+
+### 1. Choose the Right Container
+
+```cpp
+// Use vector for general-purpose arrays
+std::vector<int> scores;
+scores.reserve(expectedSize);  // Pre-allocate when size is known
+
+// Use list for frequent insertion/deletion
+std::list<Task> taskQueue;
+
+// Use map for key-value lookups
+std::map<std::string, Customer> customerDb;
+
+// Use set for unique, sorted collections
+std::set<int> uniqueIds;
+```
+
+### 2. Prefer Algorithms Over Hand-Written Loops
+
+```cpp
+// Good: Using STL algorithms
+std::vector<int> numbers = getNumbers();
+std::sort(numbers.begin(), numbers.end());
+int count = std::count_if(numbers.begin(), numbers.end(), 
+                         std::bind2nd(std::greater<int>(), 10));
+
+// Avoid: Hand-written loops when algorithms exist
+// for (size_t i = 0; i < numbers.size(); ++i) { ... }
+```
+
+### 3. Use Iterators Properly
+
+```cpp
+// Good: Iterator-based loops
+for (std::vector<int>::iterator it = vec.begin(); it != vec.end(); ++it) {
+    process(*it);
+}
+
+// Good: Range-based operations
+std::transform(input.begin(), input.end(), output.begin(), func);
+
+// Be careful with iterator invalidation
+std::vector<int> vec = getVector();
+for (std::vector<int>::iterator it = vec.begin(); it != vec.end(); ) {
+    if (shouldRemove(*it)) {
+        it = vec.erase(it);  // erase returns next valid iterator
+    } else {
+        ++it;
+    }
+}
+```
+
+## Key Concepts Summary
+
+### STL Components
+- **Containers**: Store and organize data (`vector`, `list`, `map`, `set`, `stack`, `queue`)
+- **Iterators**: Provide uniform access to container elements
+- **Algorithms**: Generic functions that work with iterators (`find`, `sort`, `copy`, `transform`)
+
+### Container Selection
+- **vector**: Dynamic arrays, random access, cache-friendly
+- **list**: Linked lists, stable iterators, efficient insertion/deletion
+- **map/set**: Sorted associative containers, logarithmic operations
+- **stack/queue**: Adapter containers, specific access patterns
+
+### Iterator Categories
+- **Input/Output**: Single-pass, read/write operations
+- **Forward**: Multi-pass, forward traversal
+- **Bidirectional**: Forward and backward traversal
+- **Random Access**: Arithmetic operations, direct positioning
+
+### Algorithm Types
+- **Non-modifying**: `find`, `count`, `search`, `equal`
+- **Modifying**: `copy`, `transform`, `replace`, `fill`
+- **Sorting**: `sort`, `partial_sort`, `nth_element`
+- **Set operations**: `merge`, `union`, `intersection`
+
+### Performance Guidelines
+- Reserve space for vectors when size is known
+- Use appropriate container for access patterns
+- Prefer algorithms over hand-written loops
+- Be aware of iterator invalidation
+- Choose algorithms based on container characteristics
+
+---
+
+*The STL is C++'s crown jewel - master containers, iterators, and algorithms to write powerful, generic, and efficient code!*
 
